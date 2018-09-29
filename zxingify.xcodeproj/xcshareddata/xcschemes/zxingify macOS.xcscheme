@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4BCD496F215F71220004869A"
-               BuildableName = "zxingify_macOS.framework"
+               BuildableName = "zxingify.framework"
                BlueprintName = "zxingify macOS"
                ReferencedContainer = "container:zxingify.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4BCD496F215F71220004869A"
-            BuildableName = "zxingify_macOS.framework"
+            BuildableName = "zxingify.framework"
             BlueprintName = "zxingify macOS"
             ReferencedContainer = "container:zxingify.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4BCD496F215F71220004869A"
-            BuildableName = "zxingify_macOS.framework"
+            BuildableName = "zxingify.framework"
             BlueprintName = "zxingify macOS"
             ReferencedContainer = "container:zxingify.xcodeproj">
          </BuildableReference>

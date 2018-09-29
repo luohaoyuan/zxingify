@@ -11,5 +11,5 @@
 import Foundation
 
 protocol ZXReader {
-    func decode(image: ZXBinaryBitmap) throws -> ZXResult
+    func decode(image: ZXBinaryBitmap, with hints: ZXDecodeHints) throws -> ZXResult
 }
