@@ -1,0 +1,3 @@
+[submodule "Tests/Resources"]
+	path = Tests/Resources
+	url = git@github.com:zxingify/zxingify-test-resources.git
