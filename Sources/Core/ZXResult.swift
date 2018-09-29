@@ -11,4 +11,5 @@
 import Foundation
 
 struct ZXResult {
+    var text: String
 }
