@@ -11,6 +11,10 @@
 		4BB231B0215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */; };
 		4BB231B2215FC0AA00ECFEE8 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 4BB231B1215FC0AA00ECFEE8 /* Resources */; };
 		4BB231B3215FC0AA00ECFEE8 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 4BB231B1215FC0AA00ECFEE8 /* Resources */; };
+		4BC0568A21602276006727A4 /* ZXBarcodeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0568921602276006727A4 /* ZXBarcodeFormat.swift */; };
+		4BC0568B21602276006727A4 /* ZXBarcodeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0568921602276006727A4 /* ZXBarcodeFormat.swift */; };
+		4BC0568D21602318006727A4 /* ZXResultMetadataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0568C21602318006727A4 /* ZXResultMetadataType.swift */; };
+		4BC0568E21602318006727A4 /* ZXResultMetadataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC0568C21602318006727A4 /* ZXResultMetadataType.swift */; };
 		4BCD4967215F70B00004869A /* zxingify.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCD4965215F70B00004869A /* zxingify.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BCD4979215F71BD0004869A /* zxingify.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCD4965215F70B00004869A /* zxingify.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BCD497B215F72950004869A /* ZXReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCD497A215F72950004869A /* ZXReader.swift */; };
@@ -45,6 +49,8 @@
 /* Begin PBXFileReference section */
 		4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXDecodeHints.swift; sourceTree = "<group>"; };
 		4BB231B1215FC0AA00ECFEE8 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		4BC0568921602276006727A4 /* ZXBarcodeFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBarcodeFormat.swift; sourceTree = "<group>"; };
+		4BC0568C21602318006727A4 /* ZXResultMetadataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXResultMetadataType.swift; sourceTree = "<group>"; };
 		4BCD4962215F70B00004869A /* zxingify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = zxingify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BCD4965215F70B00004869A /* zxingify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zxingify.h; sourceTree = "<group>"; };
 		4BCD4966215F70B00004869A /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
@@ -128,10 +134,12 @@
 		4BCD4983215F73330004869A /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				4BC0568921602276006727A4 /* ZXBarcodeFormat.swift */,
 				4BCD4980215F732D0004869A /* ZXBinaryBitmap.swift */,
-				4BCD497A215F72950004869A /* ZXReader.swift */,
 				4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */,
+				4BCD497A215F72950004869A /* ZXReader.swift */,
 				4BCD497D215F73020004869A /* ZXResult.swift */,
+				4BC0568C21602318006727A4 /* ZXResultMetadataType.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -327,7 +335,9 @@
 				4BCD4981215F732D0004869A /* ZXBinaryBitmap.swift in Sources */,
 				4BCD497E215F73020004869A /* ZXResult.swift in Sources */,
 				4BB231AF215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */,
+				4BC0568D21602318006727A4 /* ZXResultMetadataType.swift in Sources */,
 				4BCD497B215F72950004869A /* ZXReader.swift in Sources */,
+				4BC0568A21602276006727A4 /* ZXBarcodeFormat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,7 +348,9 @@
 				4BCD4982215F732D0004869A /* ZXBinaryBitmap.swift in Sources */,
 				4BCD497F215F73020004869A /* ZXResult.swift in Sources */,
 				4BB231B0215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */,
+				4BC0568E21602318006727A4 /* ZXResultMetadataType.swift in Sources */,
 				4BCD497C215F72950004869A /* ZXReader.swift in Sources */,
+				4BC0568B21602276006727A4 /* ZXBarcodeFormat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
