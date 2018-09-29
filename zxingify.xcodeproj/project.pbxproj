@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4BB231AF215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */; };
 		4BB231B0215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */; };
+		4BB231B2215FC0AA00ECFEE8 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 4BB231B1215FC0AA00ECFEE8 /* Resources */; };
+		4BB231B3215FC0AA00ECFEE8 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 4BB231B1215FC0AA00ECFEE8 /* Resources */; };
 		4BCD4967215F70B00004869A /* zxingify.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCD4965215F70B00004869A /* zxingify.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BCD4979215F71BD0004869A /* zxingify.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCD4965215F70B00004869A /* zxingify.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BCD497B215F72950004869A /* ZXReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCD497A215F72950004869A /* ZXReader.swift */; };
@@ -42,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXDecodeHints.swift; sourceTree = "<group>"; };
+		4BB231B1215FC0AA00ECFEE8 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		4BCD4962215F70B00004869A /* zxingify.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = zxingify.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BCD4965215F70B00004869A /* zxingify.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zxingify.h; sourceTree = "<group>"; };
 		4BCD4966215F70B00004869A /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
@@ -136,6 +139,7 @@
 		4BCD4989215F75870004869A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				4BB231B1215FC0AA00ECFEE8 /* Resources */,
 				4BCD498A215F75870004869A /* ZXResultTest.swift */,
 				4BCD499B215F75DF0004869A /* Info-iOS-Tests.plist */,
 				4BCD498C215F75870004869A /* Info-macOS-Tests.plist */,
@@ -301,6 +305,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BB231B3215FC0AA00ECFEE8 /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +313,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BB231B2215FC0AA00ECFEE8 /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
