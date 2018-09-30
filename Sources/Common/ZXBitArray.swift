@@ -10,7 +10,7 @@
 
 import Foundation
 
-class ZXBitArray: CustomStringConvertible, Equatable {
+class ZXBitArray: CustomStringConvertible, Equatable, Hashable {
     /**
      * @return underlying array of ints. The first element holds the first 32 bits, and the least
      *         significant bit is bit 0.
@@ -325,17 +325,16 @@ class ZXBitArray: CustomStringConvertible, Equatable {
         }
     }
     
-    /*override var hash: Int {
-     if bitsLength == 0 {
-     return 31 * size
-     }
-     
-     var bitsHash: Int = 1
-     for i in 0..<bitsLength {
-     bitsHash = 31 * bitsHash + Int(bits?[i])
-     }
-     return 31 * size + bitsHash
-     }*/
+    var hashValue: Int {
+        if bitsLength == 0 {
+            return 31 * size
+        }
+        var bitsHash: Int = 1
+        for i in 0 ..< bitsLength {
+            bitsHash = 31 * bitsHash + Int(bits[i])
+        }
+        return 31 * size + bitsHash
+    }
     
     // Ported from OpenJDK Integer.numberOfTrailingZeros implementation
     func numberOfTrailingZeros(_ i: Int32) -> Int32 {

@@ -187,18 +187,18 @@ class ZXBitArrayTestCase: XCTestCase {
         let a = ZXBitArray(size: 32)
         let b = ZXBitArray(size: 32)
         XCTAssertEqual(a, b)
-        // XCTAssertEqual(a.hash, b.hash)
+        XCTAssertEqual(a.hashValue, b.hashValue)
         
         
         XCTAssertNotEqual(a, ZXBitArray(size: 31))
         
         a.set(16)
         XCTAssertNotEqual(a, b)
-        // XCTAssertNotEqual(a.hash, b.hash)
+        XCTAssertNotEqual(a.hashValue, b.hashValue)
         
         b.set(16)
         XCTAssertEqual(a, b)
-        // XCTAssertEqual(a.hash, b.hash)
+        XCTAssertEqual(a.hashValue, b.hashValue)
     }
     
     func reverseOriginal(_ oldBits: ZXIntArray, size: Int) -> ZXIntArray {
