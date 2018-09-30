@@ -1,0 +1,3 @@
+language: swift
+xcode_project: zxingify.xcodeproj
+xcode_scheme: zxingify macOS Tests
