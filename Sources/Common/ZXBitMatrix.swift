@@ -22,7 +22,7 @@ import Foundation
  * The ordering of bits is row-major. Within each NSInteger, the least significant bits are used first,
  * meaning they represent lower x values. This is compatible with BitArray's implementation.
  */
-class ZXBitMatrix {
+class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
     /**
      * @return The width of the matrix
      */
@@ -31,7 +31,7 @@ class ZXBitMatrix {
      * @return The height of the matrix
      */
     private(set) var height: Int = 0
-    private(set) var bits: [Int32] = []
+    private(set) var bits: [Int32]
     /**
      * @return The row size of the matrix
      */
@@ -112,6 +112,14 @@ class ZXBitMatrix {
         bits = Int32(malloc(bitsSize * MemoryLayout<Int32>.size))
         clear()
         
+    }
+    
+    init(width: Int, height: Int, rowSize: Int, bits: [Int32]) {
+        self.width = width
+        self.height = height
+        self.rowSize = rowSize
+        self.bitsSize = self.rowSize * self.height
+        self.bits = bits
     }
     
     /**
@@ -370,7 +378,7 @@ class ZXBitMatrix {
     /**
      * @deprecated call descriptionWithSetString:unsetString: only, which uses \n line separator always
      */
-    func description(withSetString setString: String?, unsetString: String?, lineSeparator: String?) -> String? {
+    func description(withSetString setString: String, unsetString: String, lineSeparator: String) -> String? {
         var result = String(repeating: "\0", count: height * (width + 1))
         for y in 0..<height {
             for x in 0..<width {
@@ -381,55 +389,28 @@ class ZXBitMatrix {
         return result
     }
     
-    init(width: Int, height: Int, rowSize: Int, bits: UnsafeMutablePointer<Int32>?) {
-        //if super.init()
-        
-        self.width = width
-        self.height = height
-        self.rowSize = rowSize
-        bitsSize = self.rowSize * self.height
-        self.bits = Int32(malloc(bitsSize * MemoryLayout<Int32>.size))
-        memcpy(self.bits, bits, bitsSize * MemoryLayout<Int32>.size)
-        
-    }
-    
-    deinit {
-        if bits != nil {
-            free(bits)
-            bits = nil
-        }
-    }
-    
-    override func isEqual(_ o: Any?) -> Bool {
-        if !(o is ZXBitMatrix) {
-            return false
-        }
-        let other = o as? ZXBitMatrix
-        for i in 0..<bitsSize {
-            if bits?[i] != other?.bits?[i] {
-                return false
-            }
-        }
-        return width == other?.width && height == other?.height && rowSize == other?.rowSize && bitsSize == other?.bitsSize
-    }
-    
-    override var hash: Int {
+    var hashValue: Int {
         var hash: Int = width
         hash = 31 * hash + width
         hash = 31 * hash + height
         hash = 31 * hash + rowSize
-        for i in 0..<bitsSize {
-            hash = 31 * hash + Int(bits?[i] ?? 0)
+        for i in 0 ..< bitsSize {
+            hash = 31 * hash + Int(bits[i])
         }
         return hash
     }
     
     // string representation using "X" for set and " " for unset bits
-    override class func description() -> String {
+    var description: String {
         return description(withSetString: "X ", unsetString: "  ") ?? ""
     }
     
-    func copy(with zone: NSZone? = nil) -> Any {
-        return ZXBitMatrix.alloc(with: zone)(width: width, height: height, rowSize: rowSize, bits: &bits)
+    static func == (lhs: ZXBitMatrix, rhs: ZXBitMatrix) -> Bool {
+        for i in 0 ..< lhs.bitsSize {
+            if lhs.bits[i] != rhs.bits[i] {
+                return false
+            }
+        }
+        return lhs.width == rhs.width && lhs.height == rhs.height && lhs.rowSize == rhs.rowSize && lhs.bitsSize == rhs.bitsSize
     }
 }
