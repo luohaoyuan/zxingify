@@ -15,6 +15,8 @@
 		4B7D3A852160CC980075D468 /* ZXLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */; };
 		4B7D3A872160CCE90075D468 /* ZXInvertedLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */; };
 		4B7D3A882160CCE90075D468 /* ZXInvertedLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */; };
+		4B7D3A8A2160D5FC0075D468 /* ZXBitSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A892160D5FC0075D468 /* ZXBitSource.swift */; };
+		4B7D3A8B2160D5FC0075D468 /* ZXBitSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A892160D5FC0075D468 /* ZXBitSource.swift */; };
 		4BB231AF215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */; };
 		4BB231B0215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */; };
 		4BB231B2215FC0AA00ECFEE8 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 4BB231B1215FC0AA00ECFEE8 /* Resources */; };
@@ -59,6 +61,7 @@
 		4B7D3A802160C9D20075D468 /* ZXByteArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXByteArray.swift; sourceTree = "<group>"; };
 		4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXLuminanceSource.swift; sourceTree = "<group>"; };
 		4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXInvertedLuminanceSource.swift; sourceTree = "<group>"; };
+		4B7D3A892160D5FC0075D468 /* ZXBitSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitSource.swift; sourceTree = "<group>"; };
 		4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXDecodeHints.swift; sourceTree = "<group>"; };
 		4BB231B1215FC0AA00ECFEE8 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		4BC0568921602276006727A4 /* ZXBarcodeFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBarcodeFormat.swift; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 			children = (
 				4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */,
 				4B7D3A802160C9D20075D468 /* ZXByteArray.swift */,
+				4B7D3A892160D5FC0075D468 /* ZXBitSource.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -366,6 +370,7 @@
 				4BC0568D21602318006727A4 /* ZXResultMetadataType.swift in Sources */,
 				4BCD497B215F72950004869A /* ZXReader.swift in Sources */,
 				4BC0568A21602276006727A4 /* ZXBarcodeFormat.swift in Sources */,
+				4B7D3A8A2160D5FC0075D468 /* ZXBitSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +388,7 @@
 				4BC0568E21602318006727A4 /* ZXResultMetadataType.swift in Sources */,
 				4BCD497C215F72950004869A /* ZXReader.swift in Sources */,
 				4BC0568B21602276006727A4 /* ZXBarcodeFormat.swift in Sources */,
+				4B7D3A8B2160D5FC0075D468 /* ZXBitSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
