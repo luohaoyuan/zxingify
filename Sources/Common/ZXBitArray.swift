@@ -145,14 +145,14 @@ class ZXBitArray {
             return
         }
         end -= 1 // will be easier to treat this as the last actually set bit -- inclusive
-        let firstInt: Int = start / 32
-        let lastInt: Int = end / 32
+        let firstInt: Int32 = Int32(start) / 32
+        let lastInt: Int32 = Int32(end) / 32
         for i in firstInt...lastInt {
-            let firstBit: Int = i > firstInt ? 0 : start & 0x1f
-            let lastBit: Int = i < lastInt ? 31 : end & 0x1f
+            let firstBit: Int32 = i > firstInt ? 0 : Int32(start & 0x1f)
+            let lastBit: Int32 = i < lastInt ? 31 : Int32(end & 0x1f)
             // Ones from firstBit to lastBit, inclusive
             let mask = Int32((2 << lastBit) - (1 << firstBit))
-            bits[i] |= mask
+            bits[Int(i)] |= mask
         }
     }
     
@@ -184,8 +184,8 @@ class ZXBitArray {
         let firstInt: Int = start / 32
         let lastInt: Int = end / 32
         for i in firstInt...lastInt {
-            let firstBit: Int = i > firstInt ? 0 : start & 0x1f
-            let lastBit: Int = i < lastInt ? 31 : end & 0x1f
+            let firstBit: Int32 = i > firstInt ? 0 : Int32(start & 0x1f)
+            let lastBit: Int32 = i < lastInt ? 31 : Int32(end & 0x1f)
             // Ones from firstBit to lastBit, inclusive
             let mask = Int32((2 << lastBit) - (1 << firstBit))
             // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
@@ -371,26 +371,26 @@ class ZXBitArray {
             return 32
         }
         var n: Int32 = 31
-        y = Int32(Int(i) << 16)
+        y = Int32(i << 16)
         if Int(y) != 0 {
-            n = Int32(Int(n) - 16)
+            n = Int32(n - 16)
             i = y
         }
-        y = Int32(Int(i) << 8)
+        y = Int32(i << 8)
         if Int(y) != 0 {
-            n = Int32(Int(n) - 8)
+            n = Int32(n - 8)
             i = y
         }
-        y = Int32(Int(i) << 4)
+        y = Int32(i << 4)
         if Int(y) != 0 {
-            n = Int32(Int(n) - 4)
+            n = Int32(n - 4)
             i = y
         }
-        y = Int32(Int(i) << 2)
+        y = Int32(i << 2)
         if Int(y) != 0 {
-            n = Int32(Int(n) - 2)
+            n = Int32(n - 2)
             i = y
         }
-        return n - Int32(UInt32(i << 1) >> 31)
+        return n - Int32(UInt32(bitPattern: i << 1) >> 31)
     }
 }

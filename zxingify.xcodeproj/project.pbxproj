@@ -39,6 +39,8 @@
 		4BCD498D215F75870004869A /* zxingify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCD4970215F71220004869A /* zxingify.framework */; };
 		4BCD499C215F75DF0004869A /* zxingify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BCD4962215F70B00004869A /* zxingify.framework */; };
 		4BCD49A2215F76390004869A /* ZXResultTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCD498A215F75870004869A /* ZXResultTest.swift */; };
+		4BD97E1D2160E84B007D58CA /* ZXBitArrayTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD97E1C2160E84B007D58CA /* ZXBitArrayTestCase.swift */; };
+		4BD97E1E2160E84B007D58CA /* ZXBitArrayTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD97E1C2160E84B007D58CA /* ZXBitArrayTestCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +84,7 @@
 		4BCD498C215F75870004869A /* Info-macOS-Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-macOS-Tests.plist"; sourceTree = "<group>"; };
 		4BCD4997215F75DF0004869A /* zxingify iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "zxingify iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BCD499B215F75DF0004869A /* Info-iOS-Tests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS-Tests.plist"; sourceTree = "<group>"; };
+		4BD97E1C2160E84B007D58CA /* ZXBitArrayTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitArrayTestCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,12 +182,21 @@
 		4BCD4989215F75870004869A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				4BD97E1B2160E83A007D58CA /* Common */,
 				4BB231B1215FC0AA00ECFEE8 /* Resources */,
 				4BCD498A215F75870004869A /* ZXResultTest.swift */,
 				4BCD499B215F75DF0004869A /* Info-iOS-Tests.plist */,
 				4BCD498C215F75870004869A /* Info-macOS-Tests.plist */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		4BD97E1B2160E83A007D58CA /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				4BD97E1C2160E84B007D58CA /* ZXBitArrayTestCase.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -403,6 +415,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BCD498B215F75870004869A /* ZXResultTest.swift in Sources */,
+				4BD97E1E2160E84B007D58CA /* ZXBitArrayTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +424,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BCD49A2215F76390004869A /* ZXResultTest.swift in Sources */,
+				4BD97E1D2160E84B007D58CA /* ZXBitArrayTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
