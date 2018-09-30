@@ -6,11 +6,11 @@
 // - Date: 30.09.18
 //
 // 
-    
+
 
 import Foundation
 
-class ZXBitArray {
+class ZXBitArray: CustomStringConvertible, Equatable {
     /**
      * @return underlying array of ints. The first element holds the first 32 bits, and the least
      *         significant bit is bit 0.
@@ -29,11 +29,11 @@ class ZXBitArray {
     
     // For testing only
     /*convenience init(bits: ZXIntArray, size: Int) {
-        self.bits = bits.array
-        self.bits = Int32(malloc(bits?.length * MemoryLayout<Int32>.size))
-        memcpy(self.bits, bits?.array, bits?.length ?? 0 * MemoryLayout<Int32>.size)
-        bitsLength = bits.length
-    }*/
+     self.bits = bits.array
+     self.bits = Int32(malloc(bits?.length * MemoryLayout<Int32>.size))
+     memcpy(self.bits, bits?.array, bits?.length ?? 0 * MemoryLayout<Int32>.size)
+     bitsLength = bits.length
+     }*/
     
     init(size: Int) {
         self.size = size
@@ -187,7 +187,9 @@ class ZXBitArray {
             let firstBit: Int32 = i > firstInt ? 0 : Int32(start & 0x1f)
             let lastBit: Int32 = i < lastInt ? 31 : Int32(end & 0x1f)
             // Ones from firstBit to lastBit, inclusive
-            let mask = Int32(bitPattern: 2 << lastBit) - Int32(bitPattern: 1 << firstBit)
+            let shiftedLastBit = Int32(bitPattern: 2 << lastBit)
+            let shiftedFirstBit = Int32(bitPattern: 1 << firstBit)
+            let mask = shiftedLastBit &- shiftedFirstBit
             // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
             // equals the mask, or we're looking for 0s and the masked portion is not all 0s
             if Int((Int32(bits[Int(i)]) & mask)) != (value ? Int(mask) : 0) {
@@ -271,10 +273,10 @@ class ZXBitArray {
      *         significant bit is bit 0.
      */
     /*func bitArray() -> ZXIntArray {
-        let array = ZXIntArray(length: bitsLength)
-        memcpy(array?.array, bits, array?.length ?? 0 * MemoryLayout<Int32>.size)
-        return array
-    }*/
+     let array = ZXIntArray(length: bitsLength)
+     memcpy(array?.array, bits, array?.length ?? 0 * MemoryLayout<Int32>.size)
+     return array
+     }*/
     
     /**
      * Reverses all bits in the array.
@@ -324,44 +326,17 @@ class ZXBitArray {
         }
     }
     
-    /*override func isEqual(_ o: Any?) -> Bool {
-        if !(o is ZXBitArray) {
-            return false
-        }
-        let other = o as? ZXBitArray
-        if size != other?.size {
-            return false
-        }
-        for i in 0..<bitsLength {
-            if bits?[i] != other?.bits?[i] {
-                return false
-            }
-        }
-        return true
-    }
-    
-    override var hash: Int {
-        if bitsLength == 0 {
-            return 31 * size
-        }
-        
-        var bitsHash: Int = 1
-        for i in 0..<bitsLength {
-            bitsHash = 31 * bitsHash + Int(bits?[i])
-        }
-        return 31 * size + bitsHash
-    }
-    
-    override class func description() -> String {
-        var result = ""
-        for i in 0..<size {
-            if (i & 0x07) == 0 {
-                result += " "
-            }
-            result += get(i) ? "X" : "."
-        }
-        return result
-    }*/
+    /*override var hash: Int {
+     if bitsLength == 0 {
+     return 31 * size
+     }
+     
+     var bitsHash: Int = 1
+     for i in 0..<bitsLength {
+     bitsHash = 31 * bitsHash + Int(bits?[i])
+     }
+     return 31 * size + bitsHash
+     }*/
     
     // Ported from OpenJDK Integer.numberOfTrailingZeros implementation
     func numberOfTrailingZeros(_ i: Int32) -> Int32 {
@@ -392,5 +367,28 @@ class ZXBitArray {
             i = y
         }
         return n - Int32(UInt32(bitPattern: i << 1) >> 31)
+    }
+    
+    var description: String {
+        var result = ""
+        for i in 0..<size {
+            if (i & 0x07) == 0 {
+                result += " "
+            }
+            result += get(i) ? "X" : "."
+        }
+        return result
+    }
+    
+    static func == (lhs: ZXBitArray, rhs: ZXBitArray) -> Bool {
+        if lhs.size != rhs.size {
+            return false
+        }
+        for i in 0 ..< lhs.bitsLength {
+            if lhs.bits[i] != rhs.bits[i] {
+                return false
+            }
+        }
+        return true
     }
 }

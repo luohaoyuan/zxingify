@@ -79,28 +79,28 @@ class ZXBitArrayTestCase: XCTestCase {
         }
     }
 
-//    func testGetNextSet5() {
-//        for _ in 0..<10 {
-//            let array = ZXBitArray(size: Int.random(in: 0...100))
-//            let numSet = Int.random(in: 0..<20)
-//            for _ in 0..<numSet {
-//                array.set(Int.random(in: 0..<array.size))
-//            }
-//            let numQueries = Int.random(in: 0..<20)
-//            for _ in 0..<numQueries {
-//                let query = Int.random(in: 0..<array.size)
-//                var expected: Int = query
-//                while expected < array.size && !array.get(expected) {
-//                    expected += 1
-//                }
-//                let actual = array.nextSet(query)
-//                if actual != expected {
-//                    _ = array.nextSet(query)
-//                }
-//                XCTAssertEqual(expected, actual)
-//            }
-//        }
-//    }
+    func testGetNextSet5() {
+        for _ in 0..<10 {
+            let array = ZXBitArray(size: Int.random(in: 0...100))
+            let numSet = Int.random(in: 0..<20)
+            for _ in 0..<numSet {
+                array.set(Int.random(in: 0..<array.size))
+            }
+            let numQueries = Int.random(in: 0..<20)
+            for _ in 0..<numQueries {
+                let query = Int.random(in: 0..<array.size)
+                var expected: Int = query
+                while expected < array.size && !array.get(expected) {
+                    expected += 1
+                }
+                let actual = array.nextSet(query)
+                if actual != expected {
+                    _ = array.nextSet(query)
+                }
+                XCTAssertEqual(expected, actual)
+            }
+        }
+    }
 
     func testSetBulk() {
         let array = ZXBitArray(size: 64)
@@ -152,54 +152,55 @@ class ZXBitArrayTestCase: XCTestCase {
         XCTAssertEqual(Int32.min, ints[1])
     }
 
-//    func testIsRange() throws {
-//        let array = ZXBitArray(size: 64)
-//        XCTAssertTrue(try array.isRange(0, end: 64, value: false))
-//        XCTAssertFalse(try array.isRange(0, end: 64, value: true))
-//        array.set(32)
-//        XCTAssertTrue(try array.isRange(32, end: 33, value: true))
-//        array.set(31)
-//        XCTAssertTrue(try array.isRange(31, end: 33, value: true))
-//        array.set(34)
-//        XCTAssertFalse(try array.isRange(31, end: 35, value: true))
-//        for i in 0..<31 {
-//            array.set(i)
-//        }
-//        XCTAssertTrue(try array.isRange(0, end: 33, value: true))
-//        for i in 33..<64 {
-//            array.set(i)
-//        }
-//        XCTAssertTrue(try array.isRange(0, end: 64, value: true))
-//        XCTAssertFalse(try array.isRange(0, end: 64, value: false))
-//    }
-//
-//    func testReverseAlgorithm() {
-//        let oldBits = ZXIntArray(ints: 128, 256, 512, 6453324, 50934953, -1)
-//        for size in 1..<160 {
-//            let newBitsOriginal: ZXIntArray? = reverseOriginal(oldBits.copy(), size: size)
-//            let newBitArray = ZXBitArray(bits: oldBits.copy(), size: size)
-//            newBitArray.reverse()
-//            let newBitsNew = newBitArray() as? ZXIntArray
-//            XCTAssertTrue(arraysAreEqual(newBitsOriginal, right: newBitsNew, size: size / 32 + 1))
-//        }
-//    }
-//
-//    func testEquals() {
-//        let a = ZXBitArray(size: 32)
-//        let b = ZXBitArray(size: 32)
-//        XCTAssertEqual(a, b)
-//        XCTAssertEqual(a.hash, b.hash)
-//
-//        XCTAssertNotEqualObjects(a, ZXBitArray(size: CGSize(rawValue: 31)!))
-//
-//        a.set(16)
-//        XCTAssertNotEqualObjects(a, b)
-//        XCTAssertNotEqual(a.hash, b.hash)
-//
-//        b.set(16)
-//        XCTAssertEqual(a, b)
-//        XCTAssertEqual(a.hash, b.hash)
-//    }
+    func testIsRange() throws {
+        let array = ZXBitArray(size: 64)
+        XCTAssertTrue(try array.isRange(0, end: 64, value: false))
+        XCTAssertFalse(try array.isRange(0, end: 64, value: true))
+        array.set(32)
+        XCTAssertTrue(try array.isRange(32, end: 33, value: true))
+        array.set(31)
+        XCTAssertTrue(try array.isRange(31, end: 33, value: true))
+        array.set(34)
+        XCTAssertFalse(try array.isRange(31, end: 35, value: true))
+        for i in 0..<31 {
+            array.set(i)
+        }
+        XCTAssertTrue(try array.isRange(0, end: 33, value: true))
+        for i in 33..<64 {
+            array.set(i)
+        }
+        XCTAssertTrue(try array.isRange(0, end: 64, value: true))
+        XCTAssertFalse(try array.isRange(0, end: 64, value: false))
+    }
+    
+    func testReverseAlgorithm() {
+        let oldBits = ZXIntArray(ints: 128, 256, 512, 6453324, 50934953, -1)
+        for size in 1..<160 {
+            let newBitsOriginal: ZXIntArray? = reverseOriginal(oldBits.copy(), size: size)
+            let newBitArray = ZXBitArray(bits: oldBits.copy(), size: size)
+            newBitArray.reverse()
+            let newBitsNew = newBitArray() as? ZXIntArray
+            XCTAssertTrue(arraysAreEqual(newBitsOriginal, right: newBitsNew, size: size / 32 + 1))
+        }
+    }
+
+    func testEquals() {
+        let a = ZXBitArray(size: 32)
+        let b = ZXBitArray(size: 32)
+        XCTAssertEqual(a, b)
+        // XCTAssertEqual(a.hash, b.hash)
+        
+        
+        XCTAssertNotEqual(a, ZXBitArray(size: 31))
+
+        a.set(16)
+        XCTAssertNotEqual(a, b)
+        // XCTAssertNotEqual(a.hash, b.hash)
+
+        b.set(16)
+        XCTAssertEqual(a, b)
+        // XCTAssertEqual(a.hash, b.hash)
+    }
 //
 //    func reverseOriginal(_ oldBits: ZXIntArray?, size: Int) -> ZXIntArray? {
 //        let newBits = ZXIntArray(length: oldBits?.length ?? 0)
