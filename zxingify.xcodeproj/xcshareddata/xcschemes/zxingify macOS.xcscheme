@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4BCD4987215F75870004869A"
+               BuildableName = "zxingify macOS Tests.xctest"
+               BlueprintName = "zxingify macOS Tests"
+               ReferencedContainer = "container:zxingify.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "4BCD496F215F71220004869A"
+            BuildableName = "zxingify.framework"
+            BlueprintName = "zxingify macOS"
+            ReferencedContainer = "container:zxingify.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
