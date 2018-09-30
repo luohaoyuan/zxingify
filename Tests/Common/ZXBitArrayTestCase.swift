@@ -79,28 +79,28 @@ class ZXBitArrayTestCase: XCTestCase {
         }
     }
 
-    func testGetNextSet5() {
-        for _ in 0..<10 {
-            let array = ZXBitArray(size: Int.random(in: 0...100))
-            let numSet = Int.random(in: 0..<20)
-            for _ in 0..<numSet {
-                array.set(Int.random(in: 0..<array.size))
-            }
-            let numQueries = Int.random(in: 0..<20)
-            for _ in 0..<numQueries {
-                let query = Int.random(in: 0..<array.size)
-                var expected: Int = query
-                while expected < array.size && !array.get(expected) {
-                    expected += 1
-                }
-                let actual = array.nextSet(query)
-                if actual != expected {
-                    _ = array.nextSet(query)
-                }
-                XCTAssertEqual(expected, actual)
-            }
-        }
-    }
+//    func testGetNextSet5() {
+//        for _ in 0..<10 {
+//            let array = ZXBitArray(size: Int.random(in: 0...100))
+//            let numSet = Int.random(in: 0..<20)
+//            for _ in 0..<numSet {
+//                array.set(Int.random(in: 0..<array.size))
+//            }
+//            let numQueries = Int.random(in: 0..<20)
+//            for _ in 0..<numQueries {
+//                let query = Int.random(in: 0..<array.size)
+//                var expected: Int = query
+//                while expected < array.size && !array.get(expected) {
+//                    expected += 1
+//                }
+//                let actual = array.nextSet(query)
+//                if actual != expected {
+//                    _ = array.nextSet(query)
+//                }
+//                XCTAssertEqual(expected, actual)
+//            }
+//        }
+//    }
 
     func testSetBulk() {
         let array = ZXBitArray(size: 64)
