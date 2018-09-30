@@ -8,4 +8,4 @@ before_install:
 os: osx
 language: swift
 xcode_project: zxingify.xcodeproj
-xcode_scheme: zxingify macOS Tests
+xcode_scheme: zxingify macOS
