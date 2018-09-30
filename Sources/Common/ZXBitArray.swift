@@ -181,16 +181,16 @@ class ZXBitArray {
             return true // empty range matches
         }
         end -= 1 // will be easier to treat this as the last actually set bit -- inclusive
-        let firstInt: Int = start / 32
-        let lastInt: Int = end / 32
+        let firstInt: Int32 = Int32(start / 32)
+        let lastInt: Int32 = Int32(end / 32)
         for i in firstInt...lastInt {
             let firstBit: Int32 = i > firstInt ? 0 : Int32(start & 0x1f)
             let lastBit: Int32 = i < lastInt ? 31 : Int32(end & 0x1f)
             // Ones from firstBit to lastBit, inclusive
-            let mask = Int32((2 << lastBit) - (1 << firstBit))
+            let mask = Int32(bitPattern: 2 << lastBit) - Int32(bitPattern: 1 << firstBit)
             // Return false if we're looking for 1s and the masked bits[i] isn't all 1s (that is,
             // equals the mask, or we're looking for 0s and the masked portion is not all 0s
-            if Int((Int32(bits[i]) & mask)) != (value ? Int(mask) : 0) {
+            if Int((Int32(bits[Int(i)]) & mask)) != (value ? Int(mask) : 0) {
                 return false
             }
         }

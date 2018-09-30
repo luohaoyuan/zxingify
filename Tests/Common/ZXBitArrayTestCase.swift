@@ -149,7 +149,7 @@ class ZXBitArrayTestCase: XCTestCase {
         array.set(63)
         let ints = array.bits
         XCTAssertEqual(1, ints[0])
-        // XCTAssertEqual(INT_MIN, ints[1])
+        XCTAssertEqual(Int32.min, ints[1])
     }
 
 //    func testIsRange() throws {
