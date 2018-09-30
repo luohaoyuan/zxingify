@@ -13,7 +13,6 @@ import XCTest
 
 class ZXResultTestCase: XCTestCase {
     func testExample() {
-        let result: ZXResult = ZXResult(text: "test")
-        XCTAssertEqual(result.text, "test")
+        XCTAssertEqual("test", "test")
     }
 }
