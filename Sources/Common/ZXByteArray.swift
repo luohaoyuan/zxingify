@@ -11,20 +11,20 @@
 import Foundation
 
 class ZXByteArray: CustomStringConvertible {
-    var array: [Int8]
+    var array: [UInt8]
     var length: Int {
         return array.count
     }
     
     init(length: Int) {
-        self.array = [Int8](repeating: 0, count: length)
+        self.array = [UInt8](repeating: 0, count: length)
     }
     
-    init(array: [Int8]) {
+    init(array: [UInt8]) {
         self.array = array
     }
     
-    convenience init(bytes: Int8...) {
+    convenience init(bytes: UInt8...) {
         self.init(array: bytes)
     }
     

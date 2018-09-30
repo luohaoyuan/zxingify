@@ -11,6 +11,10 @@
 		4B7D3A7F2160C7390075D468 /* ZXBitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */; };
 		4B7D3A812160C9D20075D468 /* ZXByteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A802160C9D20075D468 /* ZXByteArray.swift */; };
 		4B7D3A822160C9D20075D468 /* ZXByteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A802160C9D20075D468 /* ZXByteArray.swift */; };
+		4B7D3A842160CC980075D468 /* ZXLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */; };
+		4B7D3A852160CC980075D468 /* ZXLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */; };
+		4B7D3A872160CCE90075D468 /* ZXInvertedLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */; };
+		4B7D3A882160CCE90075D468 /* ZXInvertedLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */; };
 		4BB231AF215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */; };
 		4BB231B0215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */; };
 		4BB231B2215FC0AA00ECFEE8 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 4BB231B1215FC0AA00ECFEE8 /* Resources */; };
@@ -53,6 +57,8 @@
 /* Begin PBXFileReference section */
 		4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitArray.swift; sourceTree = "<group>"; };
 		4B7D3A802160C9D20075D468 /* ZXByteArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXByteArray.swift; sourceTree = "<group>"; };
+		4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXLuminanceSource.swift; sourceTree = "<group>"; };
+		4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXInvertedLuminanceSource.swift; sourceTree = "<group>"; };
 		4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXDecodeHints.swift; sourceTree = "<group>"; };
 		4BB231B1215FC0AA00ECFEE8 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		4BC0568921602276006727A4 /* ZXBarcodeFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBarcodeFormat.swift; sourceTree = "<group>"; };
@@ -156,6 +162,8 @@
 				4BCD497A215F72950004869A /* ZXReader.swift */,
 				4BCD497D215F73020004869A /* ZXResult.swift */,
 				4BC0568C21602318006727A4 /* ZXResultMetadataType.swift */,
+				4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */,
+				4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -349,10 +357,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BCD4981215F732D0004869A /* ZXBinaryBitmap.swift in Sources */,
+				4B7D3A842160CC980075D468 /* ZXLuminanceSource.swift in Sources */,
 				4B7D3A812160C9D20075D468 /* ZXByteArray.swift in Sources */,
 				4BCD497E215F73020004869A /* ZXResult.swift in Sources */,
 				4B7D3A7E2160C7390075D468 /* ZXBitArray.swift in Sources */,
 				4BB231AF215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */,
+				4B7D3A872160CCE90075D468 /* ZXInvertedLuminanceSource.swift in Sources */,
 				4BC0568D21602318006727A4 /* ZXResultMetadataType.swift in Sources */,
 				4BCD497B215F72950004869A /* ZXReader.swift in Sources */,
 				4BC0568A21602276006727A4 /* ZXBarcodeFormat.swift in Sources */,
@@ -364,10 +374,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BCD4982215F732D0004869A /* ZXBinaryBitmap.swift in Sources */,
+				4B7D3A852160CC980075D468 /* ZXLuminanceSource.swift in Sources */,
 				4B7D3A822160C9D20075D468 /* ZXByteArray.swift in Sources */,
 				4BCD497F215F73020004869A /* ZXResult.swift in Sources */,
 				4B7D3A7F2160C7390075D468 /* ZXBitArray.swift in Sources */,
 				4BB231B0215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */,
+				4B7D3A882160CCE90075D468 /* ZXInvertedLuminanceSource.swift in Sources */,
 				4BC0568E21602318006727A4 /* ZXResultMetadataType.swift in Sources */,
 				4BCD497C215F72950004869A /* ZXReader.swift in Sources */,
 				4BC0568B21602276006727A4 /* ZXBarcodeFormat.swift in Sources */,

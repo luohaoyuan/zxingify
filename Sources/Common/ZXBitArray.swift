@@ -262,7 +262,7 @@ class ZXBitArray {
                 }
                 bitOffset += 1
             }
-            array.array[offset + i] = Int8(theByte)
+            array.array[offset + i] = UInt8(theByte)
         }
     }
     
