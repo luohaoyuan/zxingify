@@ -28,12 +28,11 @@ class ZXBitArray: CustomStringConvertible, Equatable {
     }
     
     // For testing only
-    /*convenience init(bits: ZXIntArray, size: Int) {
-     self.bits = bits.array
-     self.bits = Int32(malloc(bits?.length * MemoryLayout<Int32>.size))
-     memcpy(self.bits, bits?.array, bits?.length ?? 0 * MemoryLayout<Int32>.size)
-     bitsLength = bits.length
-     }*/
+    convenience init(bits: ZXIntArray, size: Int) {
+        self.init(size: size)
+        self.bits = bits.array
+        self.bitsLength = bits.length
+    }
     
     init(size: Int) {
         self.size = size
@@ -288,7 +287,7 @@ class ZXBitArray: CustomStringConvertible, Equatable {
         let len: Int = (size - 1) / 32
         let oldBitsLen: Int = len + 1
         for i in 0..<oldBitsLen {
-            var x = Int(bits[i])
+            var x = bits[i]
             x = ((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1)
             x = ((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2)
             x = ((x >> 4) & 0x0f0f0f0f) | ((x & 0x0f0f0f0f) << 4)
@@ -299,16 +298,16 @@ class ZXBitArray: CustomStringConvertible, Equatable {
         // now correct the int's if the bit size isn't a multiple of 32
         if size != oldBitsLen * 32 {
             let leftOffset: Int = oldBitsLen * 32 - size
-            var mask: Int = 1
+            var mask: Int32 = 1
             for _ in 0..<31 - leftOffset {
                 mask = (mask << 1) | 1
             }
-            var currentInt = Int32((Int(newBits[0]) >> leftOffset) & mask)
+            var currentInt = Int32((newBits[0] >> leftOffset) & mask)
             for i in 1..<oldBitsLen {
                 let nextInt: Int32 = newBits[i]
-                currentInt |= Int32(Int(nextInt) << (32 - leftOffset))
+                currentInt |= Int32(nextInt << (32 - leftOffset))
                 newBits[i - 1] = currentInt
-                currentInt = Int32((Int(nextInt) >> leftOffset) & mask)
+                currentInt = Int32((nextInt >> leftOffset) & mask)
             }
             newBits[oldBitsLen - 1] = currentInt
         }

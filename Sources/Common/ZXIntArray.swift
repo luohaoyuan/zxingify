@@ -20,7 +20,7 @@ class ZXIntArray: CustomStringConvertible, Equatable {
         self.array = [Int32](repeating: 0, count: length)
     }
     
-    init(ints: [Int32]) {
+    init(ints: Int32...) {
         self.array = ints
     }
     
