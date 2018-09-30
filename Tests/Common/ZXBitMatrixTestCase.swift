@@ -8,7 +8,8 @@
 // 
     
 
-import Foundation
+import XCTest
+@testable import zxingify
 
 class ZXBitMatrixTestCase: XCTestCase {
     static var BIT_MATRIX_POINTS: ZXIntArray? = nil
