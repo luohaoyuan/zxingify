@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B325F9A2162A37100B77A19 /* ZXBinarizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B325F992162A37100B77A19 /* ZXBinarizer.swift */; };
+		4B325F9B2162A37100B77A19 /* ZXBinarizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B325F992162A37100B77A19 /* ZXBinarizer.swift */; };
 		4B497DB321616CF500F366F1 /* ZXIntArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B497DB221616CF500F366F1 /* ZXIntArray.swift */; };
 		4B497DB421616CF500F366F1 /* ZXIntArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B497DB221616CF500F366F1 /* ZXIntArray.swift */; };
 		4B497DB62161723800F366F1 /* ZXBitMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B497DB52161723800F366F1 /* ZXBitMatrix.swift */; };
@@ -67,6 +69,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4B325F992162A37100B77A19 /* ZXBinarizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBinarizer.swift; sourceTree = "<group>"; };
 		4B497DB221616CF500F366F1 /* ZXIntArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXIntArray.swift; sourceTree = "<group>"; };
 		4B497DB52161723800F366F1 /* ZXBitMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitMatrix.swift; sourceTree = "<group>"; };
 		4B497DB82161726D00F366F1 /* ZXBitMatrixTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitMatrixTestCase.swift; sourceTree = "<group>"; };
@@ -179,13 +182,14 @@
 			isa = PBXGroup;
 			children = (
 				4BC0568921602276006727A4 /* ZXBarcodeFormat.swift */,
+				4B325F992162A37100B77A19 /* ZXBinarizer.swift */,
 				4BCD4980215F732D0004869A /* ZXBinaryBitmap.swift */,
 				4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */,
+				4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */,
+				4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */,
 				4BCD497A215F72950004869A /* ZXReader.swift */,
 				4BCD497D215F73020004869A /* ZXResult.swift */,
 				4BC0568C21602318006727A4 /* ZXResultMetadataType.swift */,
-				4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */,
-				4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -390,6 +394,7 @@
 			files = (
 				4BCD4981215F732D0004869A /* ZXBinaryBitmap.swift in Sources */,
 				4B7D3A8D2160D6DB0075D468 /* ZXBoolArray.swift in Sources */,
+				4B325F9A2162A37100B77A19 /* ZXBinarizer.swift in Sources */,
 				4B7D3A842160CC980075D468 /* ZXLuminanceSource.swift in Sources */,
 				4B7D3A812160C9D20075D468 /* ZXByteArray.swift in Sources */,
 				4BCD497E215F73020004869A /* ZXResult.swift in Sources */,
@@ -411,6 +416,7 @@
 			files = (
 				4BCD4982215F732D0004869A /* ZXBinaryBitmap.swift in Sources */,
 				4B7D3A8E2160D6DB0075D468 /* ZXBoolArray.swift in Sources */,
+				4B325F9B2162A37100B77A19 /* ZXBinarizer.swift in Sources */,
 				4B7D3A852160CC980075D468 /* ZXLuminanceSource.swift in Sources */,
 				4B7D3A822160C9D20075D468 /* ZXByteArray.swift in Sources */,
 				4BCD497F215F73020004869A /* ZXResult.swift in Sources */,
