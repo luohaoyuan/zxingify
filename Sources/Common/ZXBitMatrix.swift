@@ -53,7 +53,6 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         rowSize = (self.width + 31) / 32
         bitsSize = rowSize * self.height
         bits = [Int32](repeating: 0, count: bitsSize)
-        clear()
     }
 
     init(width: Int, height: Int, rowSize: Int, bits: [Int32]) {
@@ -72,7 +71,8 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         var nRows: Int = 0
         var pos: Int = 0
         while pos < stringRepresentation.count {
-            if stringRepresentation[stringRepresentation.index(stringRepresentation.startIndex, offsetBy: pos)] == "\n" || stringRepresentation[stringRepresentation.index(stringRepresentation.startIndex, offsetBy: pos)] == "\r" {
+            let charAtPos = (stringRepresentation as NSString).substring(with: NSRange(location: pos, length: 1))
+            if charAtPos == "\n" || charAtPos == "\r" {
                 if bitsPos > rowStartPos {
                     if rowLength == -1 {
                         rowLength = bitsPos - rowStartPos
@@ -108,7 +108,9 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         
         let matrix = try ZXBitMatrix(width: rowLength, height: nRows)
         for i in 0..<bitsPos {
-            matrix.setX(i % rowLength, y: i / rowLength)
+            if bits.array[i] {
+                matrix.setX(i % rowLength, y: i / rowLength)
+            }
         }
         return matrix
     }
@@ -194,7 +196,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         }
         let right: Int = left + aWidth
         let bottom: Int = top + aHeight
-        if bottom > height || `right` > width {
+        if bottom > height || right > width {
             throw NSException(name: .invalidArgumentException, reason: "The region must fit inside the matrix", userInfo: nil) as! Error
         }
         for y in top..<bottom {
@@ -283,21 +285,21 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
                     if y > bottom {
                         bottom = y
                     }
-                    if x32 * 32 < `left` {
+                    if x32 * 32 < left {
                         var bit: Int32 = 0
-                        while (Int(theBits) << (31 - Int(bit))) == 0 {
+                        while (theBits << (31 - bit)) == 0 {
                             bit += 1
                         }
-                        if (x32 * 32 + Int(bit)) < `left` {
+                        if (x32 * 32 + Int(bit)) < left {
                             left = x32 * 32 + Int(bit)
                         }
                     }
-                    if x32 * 32 + 31 > `right` {
+                    if x32 * 32 + 31 > right {
                         var bit: Int = 31
-                        while (Int(theBits) >> bit) == 0 {
+                        while (theBits >> bit) == 0 {
                             bit -= 1
                         }
-                        if (x32 * 32 + bit) > `right` {
+                        if (x32 * 32 + bit) > right {
                             right = x32 * 32 + bit
                         }
                     }
@@ -333,7 +335,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         
         let theBits = Int32(bits[bitsOffset])
         var bit: Int32 = 0
-        while (Int(theBits) << (31 - Int(bit))) == 0 {
+        while (theBits << (31 - bit)) == 0 {
             bit += 1
         }
         x += Int(bit)
@@ -354,7 +356,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         
         let theBits = Int32(bits[bitsOffset])
         var bit: Int32 = 31
-        while Int(((theBits) >> bit)) == 0 {
+        while ((theBits) >> bit) == 0 {
             bit -= 1
         }
         x += Int(bit)
