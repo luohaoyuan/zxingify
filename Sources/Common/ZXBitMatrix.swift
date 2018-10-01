@@ -38,40 +38,61 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
     private(set) var rowSize: Int = 0
     
     private var bitsSize: Int = 0
-    
-    class func parse(_ stringRepresentation: String?, setString: String?, unsetString: String?) -> ZXBitMatrix? {
-        if stringRepresentation == nil {
-            throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "stringRepresentation is required", userInfo: nil)
+
+    // A helper to construct a square matrix.
+    convenience init(dimension: Int) throws {
+        try self.init(width: dimension, height: dimension)
+    }
+
+    init(width: Int, height: Int) throws {
+        if width < 1 || height < 1 {
+            throw NSException(name: .invalidArgumentException, reason: "Both dimensions must be greater than 0", userInfo: nil) as! Error
         }
-        
-        let bits = ZXBoolArray(length: Int(UInt(stringRepresentation?.count ?? 0)))
-        let bitsPos: Int = 0
+        self.width = width
+        self.height = height
+        rowSize = (self.width + 31) / 32
+        bitsSize = rowSize * self.height
+        bits = [Int32](repeating: 0, count: bitsSize)
+        clear()
+    }
+
+    init(width: Int, height: Int, rowSize: Int, bits: [Int32]) {
+        self.width = width
+        self.height = height
+        self.rowSize = rowSize
+        self.bitsSize = self.rowSize * self.height
+        self.bits = bits
+    }
+    
+    class func parse(stringRepresentation: String, setString: String, unsetString: String) throws -> ZXBitMatrix {
+        let bits = ZXBoolArray(length: stringRepresentation.count)
+        var bitsPos: Int = 0
         var rowStartPos: Int = 0
         var rowLength: Int = -1
-        let nRows: Int = 0
+        var nRows: Int = 0
         var pos: Int = 0
-        while pos < (stringRepresentation?.count ?? 0) {
-            if stringRepresentation?[stringRepresentation?.index(stringRepresentation?.startIndex, offsetBy: UInt(pos))] == "\n" || stringRepresentation?[stringRepresentation?.index(stringRepresentation?.startIndex, offsetBy: UInt(pos))] == "\r" {
+        while pos < stringRepresentation.count {
+            if stringRepresentation[stringRepresentation.index(stringRepresentation.startIndex, offsetBy: pos)] == "\n" || stringRepresentation[stringRepresentation.index(stringRepresentation.startIndex, offsetBy: pos)] == "\r" {
                 if bitsPos > rowStartPos {
                     if rowLength == -1 {
                         rowLength = bitsPos - rowStartPos
                     } else if bitsPos - rowStartPos != rowLength {
-                        throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "row lengths do not match", userInfo: nil)
+                        throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "row lengths do not match", userInfo: nil) as! Error
                     }
                     rowStartPos = bitsPos
                     nRows += 1
                 }
                 pos += 1
-            } else if (((stringRepresentation as NSString?)?.substring(with: NSRange(location: pos, length: setString?.count ?? 0))) == setString) {
-                pos += setString?.count ?? 0
-                bits?.array[bitsPos] = true
+            } else if (((stringRepresentation as NSString).substring(with: NSRange(location: pos, length: setString.count))) == setString) {
+                pos += setString.count
+                bits.array[bitsPos] = true
                 bitsPos += 1
-            } else if (((stringRepresentation as NSString?)?.substring(with: NSRange(location: pos, length: unsetString?.count ?? 0))) == unsetString) {
-                pos += unsetString?.count ?? 0
-                bits?.array[bitsPos] = false
+            } else if (((stringRepresentation as NSString).substring(with: NSRange(location: pos, length: unsetString.count))) == unsetString) {
+                pos += unsetString.count
+                bits.array[bitsPos] = false
                 bitsPos += 1
             } else {
-                throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "illegal character encountered: \((stringRepresentation as? NSString)?.substring(from: pos) ?? "")", userInfo: nil)
+                throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "illegal character encountered: \((stringRepresentation as NSString).substring(from: pos))", userInfo: nil) as! NSError
             }
         }
         
@@ -80,46 +101,16 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
             if rowLength == -1 {
                 rowLength = bitsPos - rowStartPos
             } else if bitsPos - rowStartPos != rowLength {
-                throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "row lengths do not match", userInfo: nil)
+                throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "row lengths do not match", userInfo: nil) as! Error
             }
             nRows += 1
         }
         
-        let matrix = ZXBitMatrix(width: rowLength, height: nRows)
+        let matrix = try ZXBitMatrix(width: rowLength, height: nRows)
         for i in 0..<bitsPos {
-            if bits?.array[i] != nil {
-                matrix.setX(i % rowLength, y: i / rowLength)
-            }
+            matrix.setX(i % rowLength, y: i / rowLength)
         }
         return matrix
-    }
-    
-    // A helper to construct a square matrix.
-    convenience init(dimension: Int) {
-        self.init(width: dimension, height: dimension)
-    }
-    
-    init(width: Int, height: Int) {
-        //if super.init()
-        
-        if width < 1 || height < 1 {
-            throw NSException(name: .invalidArgumentException, reason: "Both dimensions must be greater than 0", userInfo: nil)
-        }
-        self.width = width
-        self.height = height
-        rowSize = (self.width + 31) / 32
-        bitsSize = rowSize * self.height
-        bits = Int32(malloc(bitsSize * MemoryLayout<Int32>.size))
-        clear()
-        
-    }
-    
-    init(width: Int, height: Int, rowSize: Int, bits: [Int32]) {
-        self.width = width
-        self.height = height
-        self.rowSize = rowSize
-        self.bitsSize = self.rowSize * self.height
-        self.bits = bits
     }
     
     /**
@@ -131,7 +122,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      */
     func getX(_ x: Int, y: Int) -> Bool {
         let offset: Int = y * rowSize + (x / 32)
-        return ((Int(bits?[offset] ?? 0) >> (x & 0x1f)) & 1) != 0
+        return ((Int(bits[offset]) >> (x & 0x1f)) & 1) != 0
     }
     
     /**
@@ -142,12 +133,12 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      */
     func setX(_ x: Int, y: Int) {
         let offset: Int = y * rowSize + (x / 32)
-        bits?[offset] |= 1 << (x & 0x1f)
+        bits[offset] |= 1 << (x & 0x1f)
     }
     
     func unsetX(_ x: Int, y: Int) {
         let offset: Int = y * rowSize + (x / 32)
-        bits?[offset] &= ~(1 << (x & 0x1f))
+        bits[offset] &= ~(1 << (x & 0x1f))
     }
     
     /**
@@ -158,7 +149,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      */
     func flipX(_ x: Int, y: Int) {
         let offset: Int = y * rowSize + (x / 32)
-        bits?[offset] ^= 1 << (x & 0x1f)
+        bits[offset] ^= 1 << (x & 0x1f)
     }
     
     /**
@@ -167,16 +158,16 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      *
      * @param mask XOR mask
      */
-    func xor(_ mask: ZXBitMatrix?) {
-        if width != mask?.width || height != mask?.height || rowSize != mask?.rowSize {
-            throw NSException(name: .invalidArgumentException, reason: "input matrix dimensions do not match", userInfo: nil)
+    func xor(_ mask: ZXBitMatrix) throws {
+        if width != mask.width || height != mask.height || rowSize != mask.rowSize {
+            throw NSException(name: .invalidArgumentException, reason: "input matrix dimensions do not match", userInfo: nil) as! Error
         }
-        let rowArray = ZXBitArray(size: CGSize(rawValue: width)!)
-        for y in 0..<height {
+        let rowArray = ZXBitArray(size: width)
+        for y in 0 ..< height {
             let offset: Int = y * rowSize
-            let row = mask?.rowAt(y: y, row: rowArray)?.bits
-            for x in 0..<rowSize {
-                bits?[offset + x] ^= row?[x] ?? 0
+            let row = mask.rowAt(y: y, row: rowArray).bits
+            for x in 0 ..< rowSize {
+                bits[offset + x] ^= row[x]
             }
         }
     }
@@ -186,7 +177,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      */
     func clear() {
         let max: Int = bitsSize
-        memset(bits, 0, max * MemoryLayout<Int32>.size)
+        self.bits = [Int32](repeating: 0, count: max)
     }
     
     /**
@@ -197,19 +188,19 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      * @param width The width of the region
      * @param height The height of the region
      */
-    func setRegionAtLeft(_ `left`: Int, top: Int, width aWidth: Int, height aHeight: Int) {
+    func setRegionAtLeft(left: Int, top: Int, width aWidth: Int, height aHeight: Int) throws {
         if aHeight < 1 || aWidth < 1 {
-            throw NSException(name: .invalidArgumentException, reason: "Height and width must be at least 1", userInfo: nil)
+            throw NSException(name: .invalidArgumentException, reason: "Height and width must be at least 1", userInfo: nil) as! Error
         }
-        let `right`: Int = `left` + aWidth
+        let right: Int = left + aWidth
         let bottom: Int = top + aHeight
         if bottom > height || `right` > width {
-            throw NSException(name: .invalidArgumentException, reason: "The region must fit inside the matrix", userInfo: nil)
+            throw NSException(name: .invalidArgumentException, reason: "The region must fit inside the matrix", userInfo: nil) as! Error
         }
         for y in top..<bottom {
             let offset: Int = y * rowSize
-            for x in `left`..<`right` {
-                bits?[offset + (x / 32)] |= 1 << (x & 0x1f)
+            for x in left..<right {
+                bits[offset + (x / 32)] |= 1 << (x & 0x1f)
             }
         }
     }
@@ -222,27 +213,34 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      * @return The resulting BitArray - this reference should always be used even when passing
      *         your own row
      */
-    func rowAt(y: Int, row: ZXBitArray?) -> ZXBitArray? {
-        if row == nil || row?.size() ?? 0 < width {
-            row = ZXBitArray(size: CGSize(rawValue: width)!)
+    func rowAt(y: Int, row: ZXBitArray?) -> ZXBitArray {
+        var rowValue: ZXBitArray!
+        if row == nil {
+            rowValue = ZXBitArray(size: width)
         } else {
-            row?.clear()
+            rowValue = row!
+        }
+        
+        if rowValue.size < width {
+            rowValue = ZXBitArray(size: width)
+        } else {
+            rowValue.clear()
         }
         let offset: Int = y * rowSize
         for x in 0..<rowSize {
-            row?.setBulk(x * 32, newBits: bits?[offset + x])
+            rowValue.setBulk(x * 32, newBits: bits[offset + x])
         }
         
-        return row
+        return rowValue
     }
     
     /**
      * @param y row to set
      * @param row ZXBitArray to copy from
      */
-    func setRowAtY(_ y: Int, row: ZXBitArray?) {
+    func setRowAtY(_ y: Int, row: ZXBitArray) {
         for i in 0..<rowSize {
-            bits?[(y * rowSize) + i] = row?.bits?[i]
+            bits[(y * rowSize) + i] = row.bits[i]
         }
     }
     
@@ -252,15 +250,11 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
     func rotate180() {
         let width: Int = self.width
         let height: Int = self.height
-        var topRow = ZXBitArray(size: CGSize(rawValue: width)!)
-        var bottomRow = ZXBitArray(size: CGSize(rawValue: width)!)
+        var topRow = ZXBitArray(size: width)
+        var bottomRow = ZXBitArray(size: width)
         for i in 0..<(height + 1) / 2 {
-            if let aRow = rowAt(y: i, row: topRow) {
-                topRow = aRow
-            }
-            if let aRow = rowAt(y: height - 1 - i, row: bottomRow) {
-                bottomRow = aRow
-            }
+            topRow = rowAt(y: i, row: topRow)
+            bottomRow = rowAt(y: height - 1 - i, row: bottomRow)
             topRow.reverse()
             bottomRow.reverse()
             setRowAtY(i, row: bottomRow)
@@ -274,15 +268,15 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      * @return {left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
      */
     func enclosingRectangle() -> ZXIntArray? {
-        var `left`: Int = self.width
+        var left: Int = self.width
         var top: Int = self.height
-        var `right`: Int = -1
+        var right: Int = -1
         var bottom: Int = -1
         
         for y in 0..<self.height {
             for x32 in 0..<rowSize {
-                let theBits = Int32(bits?[y * rowSize + x32] ?? 0)
-                if Int(theBits ?? 0) != 0 {
+                let theBits = Int32(bits[y * rowSize + x32])
+                if Int(theBits) != 0 {
                     if y < top {
                         top = y
                     }
@@ -290,35 +284,35 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
                         bottom = y
                     }
                     if x32 * 32 < `left` {
-                        let bit: Int32 = 0
-                        while (Int(theBits ?? 0) << (31 - Int(bit))) == 0 {
+                        var bit: Int32 = 0
+                        while (Int(theBits) << (31 - Int(bit))) == 0 {
                             bit += 1
                         }
                         if (x32 * 32 + Int(bit)) < `left` {
-                            `left` = x32 * 32 + Int(bit)
+                            left = x32 * 32 + Int(bit)
                         }
                     }
                     if x32 * 32 + 31 > `right` {
-                        let bit: Int = 31
-                        while (Int(theBits ?? 0) >> bit) == 0 {
+                        var bit: Int = 31
+                        while (Int(theBits) >> bit) == 0 {
                             bit -= 1
                         }
                         if (x32 * 32 + bit) > `right` {
-                            `right` = x32 * 32 + bit
+                            right = x32 * 32 + bit
                         }
                     }
                 }
             }
         }
         
-        let width: Int = `right` - `left` + 1
+        let width: Int = right - left + 1
         let height: Int = bottom - top + 1
         
         if width < 0 || height < 0 {
             return nil
         }
         
-        return ZXIntArray(ints: `left`, top, width, height, -1)
+        return ZXIntArray(ints: Int32(left), Int32(top), Int32(width), Int32(height))
     }
     
     /**
@@ -327,8 +321,8 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      * @return {x,y} coordinate of top-left-most 1 bit, or null if it is all white
      */
     func topLeftOnBit() -> ZXIntArray? {
-        let bitsOffset: Int = 0
-        while bitsOffset < bitsSize && IntegerLiteralConvertible(bits?[bitsOffset] ?? 0) == 0 {
+        var bitsOffset: Int = 0
+        while bitsOffset < bitsSize && bits[bitsOffset] == 0 {
             bitsOffset += 1
         }
         if bitsOffset == bitsSize {
@@ -337,18 +331,18 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         let y: Int = bitsOffset / rowSize
         var x: Int = (bitsOffset % rowSize) * 32
         
-        let theBits = Int32(bits?[bitsOffset] ?? 0)
-        let bit: Int32 = 0
-        while (Int(theBits ?? 0) << (31 - Int(bit))) == 0 {
+        let theBits = Int32(bits[bitsOffset])
+        var bit: Int32 = 0
+        while (Int(theBits) << (31 - Int(bit))) == 0 {
             bit += 1
         }
         x += Int(bit)
-        return ZXIntArray(ints: x, y, -1)
+        return ZXIntArray(ints: Int32(x), Int32(y))
     }
     
     func bottomRightOnBit() -> ZXIntArray? {
-        let bitsOffset: Int = bitsSize - 1
-        while bitsOffset >= 0 && IntegerLiteralConvertible(bits?[bitsOffset] ?? 0) == 0 {
+        var bitsOffset: Int = bitsSize - 1
+        while bitsOffset >= 0 && bits[bitsOffset] == 0 {
             bitsOffset -= 1
         }
         if bitsOffset < 0 {
@@ -358,35 +352,37 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         let y: Int = bitsOffset / rowSize
         var x: Int = (bitsOffset % rowSize) * 32
         
-        let theBits = Int32(bits?[bitsOffset] ?? 0)
-        let bit: Int32 = 31
-        while Int(((theBits ?? 0) >> bit)) == 0 {
+        let theBits = Int32(bits[bitsOffset])
+        var bit: Int32 = 31
+        while Int(((theBits) >> bit)) == 0 {
             bit -= 1
         }
         x += Int(bit)
         
-        return ZXIntArray(ints: x, y, -1)
+        return ZXIntArray(ints: Int32(x), Int32(y))
     }
     
-    func description(withSetString setString: String?, unsetString: String?) -> String? {
-        //GCC diagnostic push
-        //GCC diagnostic ignored "-Wdeprecated-declarations"
+    func description(withSetString setString: String, unsetString: String) -> String {
         return description(withSetString: setString, unsetString: unsetString, lineSeparator: "\n")
-        //GCC diagnostic pop
     }
     
     /**
      * @deprecated call descriptionWithSetString:unsetString: only, which uses \n line separator always
      */
-    func description(withSetString setString: String, unsetString: String, lineSeparator: String) -> String? {
+    func description(withSetString setString: String, unsetString: String, lineSeparator: String) -> String {
         var result = String(repeating: "\0", count: height * (width + 1))
         for y in 0..<height {
             for x in 0..<width {
-                result += getX(x, y: y) ? setString : unsetString ?? ""
+                result += getX(x, y: y) ? setString : unsetString
             }
-            result += lineSeparator ?? ""
+            result += lineSeparator
         }
         return result
+    }
+
+    // string representation using "X" for set and " " for unset bits
+    var description: String {
+        return description(withSetString: "X ", unsetString: "  ")
     }
     
     var hashValue: Int {
@@ -398,11 +394,6 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
             hash = 31 * hash + Int(bits[i])
         }
         return hash
-    }
-    
-    // string representation using "X" for set and " " for unset bits
-    var description: String {
-        return description(withSetString: "X ", unsetString: "  ") ?? ""
     }
     
     static func == (lhs: ZXBitMatrix, rhs: ZXBitMatrix) -> Bool {
