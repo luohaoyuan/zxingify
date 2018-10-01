@@ -174,7 +174,7 @@ class ZXBitArrayTestCase: XCTestCase {
     }
     
     func testReverseAlgorithm() {
-        let oldBits = ZXIntArray(ints: 128, 256, 512, 6453324, 50934953, -1)
+        let oldBits = ZXIntArray(ints: 128, 256, 512, 6453324, 50934953)
         for size in 1..<160 {
             let newBitsOriginal: ZXIntArray = reverseOriginal(oldBits, size: size)
             let newBitArray = ZXBitArray(bits: oldBits, size: size)
