@@ -10,33 +10,33 @@
 
 import Foundation
 
-class ZXBitArray: CustomStringConvertible, Equatable, Hashable {
+class ZXBitArray {
     /**
      * @return underlying array of ints. The first element holds the first 32 bits, and the least
      *         significant bit is bit 0.
      */
-    private(set) var bits: [Int32] = []
-    private(set) var size: Int = 0
-    
-    private var bitsLength: Int = 0
+    var bits: [Int32]
+    var bitsLength: Int {
+        return bits.count
+    }
+    var size: Int = 0
     
     
     init() {
         size = 0
-        bits = [Int32](repeating: 1, count: bitsLength)
-        bitsLength = 1
+        bits = [Int32](repeating: 1, count: 1)
     }
     
     // For testing only
     convenience init(bits: ZXIntArray, size: Int) {
-        self.init(size: size)
+        self.init(size: bits.length)
         self.bits = bits.array
-        self.bitsLength = bits.length
+        self.size = size
     }
     
     init(size: Int) {
         self.size = size
-        bitsLength = (size + 31) / 32
+        let bitsLength = (size + 31) / 32
         bits = [Int32](repeating: 0, count: bitsLength)
     }
     
@@ -271,11 +271,13 @@ class ZXBitArray: CustomStringConvertible, Equatable, Hashable {
      * @return underlying array of ints. The first element holds the first 32 bits, and the least
      *         significant bit is bit 0.
      */
-    /*func bitArray() -> ZXIntArray {
-     let array = ZXIntArray(length: bitsLength)
-     memcpy(array?.array, bits, array?.length ?? 0 * MemoryLayout<Int32>.size)
-     return array
-     }*/
+    var bitArray: ZXIntArray {
+        let array = ZXIntArray(length: bitsLength)
+        for i in 0 ..< bitsLength {
+            array.array[i] = bits[i]
+        }
+        return array
+    }
     
     /**
      * Reverses all bits in the array.
@@ -317,23 +319,12 @@ class ZXBitArray: CustomStringConvertible, Equatable, Hashable {
     func ensureCapacity(_ size: Int) {
         if size > bitsLength * 32 {
             let newBitsLength: Int = (size + 31) / 32
-            let newBits = [Int32](repeating: 0, count: newBitsLength)
-            //memcpy(newBits, bits, bitsLength * MemoryLayout<Int32>.size)
-            //memset(Int(newBits ?? 0) + bitsLength, 0, (newBitsLength - bitsLength) * MemoryLayout<Int32>.size)
+            var newBits = [Int32](repeating: 0, count: newBitsLength)
+            for i in 0..<bitsLength {
+                newBits[i] = bits[i]
+            }
             bits = newBits
-            bitsLength = newBitsLength
         }
-    }
-    
-    var hashValue: Int {
-        if bitsLength == 0 {
-            return 31 * size
-        }
-        var bitsHash: Int = 1
-        for i in 0 ..< bitsLength {
-            bitsHash = 31 * bitsHash + Int(bits[i])
-        }
-        return 31 * size + bitsHash
     }
     
     // Ported from OpenJDK Integer.numberOfTrailingZeros implementation
@@ -366,7 +357,9 @@ class ZXBitArray: CustomStringConvertible, Equatable, Hashable {
         }
         return n - Int32(UInt32(bitPattern: i << 1) >> 31)
     }
-    
+}
+
+extension ZXBitArray: CustomStringConvertible, Equatable, Hashable {
     var description: String {
         var result = ""
         for i in 0..<size {
@@ -377,7 +370,7 @@ class ZXBitArray: CustomStringConvertible, Equatable, Hashable {
         }
         return result
     }
-    
+
     static func == (lhs: ZXBitArray, rhs: ZXBitArray) -> Bool {
         if lhs.size != rhs.size {
             return false
@@ -388,5 +381,16 @@ class ZXBitArray: CustomStringConvertible, Equatable, Hashable {
             }
         }
         return true
+    }
+
+    var hashValue: Int {
+        if bitsLength == 0 {
+            return 31 * size
+        }
+        var bitsHash: Int = 1
+        for i in 0 ..< bitsLength {
+            bitsHash = 31 * bitsHash + Int(bits[i])
+        }
+        return 31 * size + bitsHash
     }
 }
