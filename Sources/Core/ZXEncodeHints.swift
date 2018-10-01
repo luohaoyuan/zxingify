@@ -31,34 +31,22 @@ enum ZXPDF417Compaction : Int {
 /**
  * These are a set of hints that you may pass to Writers to specify their behavior.
  */
-class ZXEncodeHints: NSObject {
+struct ZXEncodeHints {
     /**
      * Specifies what character encoding to use where applicable.
      */
-    var encoding: NSStringEncoding?
+    var encoding: String.Encoding?
     /**
      * Specifies the matrix shape for Data Matrix.
      */
     var dataMatrixShape: ZXDataMatrixSymbolShapeHint?
     /**
-     * Specifies a minimum barcode size. Only applicable to Data Matrix now.
-     *
-     * @deprecated use width/height params in
-     * ZXDataMatrixWriter encode:format:width:height:error:
-     */
-    var deprecated_ATTRIBUTE: ZXDimension?
-    /**
-     * Specifies a maximum barcode size. Only applicable to Data Matrix now.
-     *
-     * @deprecated without replacement
-     */
-    var deprecated_ATTRIBUTE: ZXDimension?
-    /**
      * Specifies what degree of error correction to use, for example in QR Codes.
      * For Aztec it represents the minimal percentage of error correction words.
      * Note: an Aztec symbol should have a minimum of 25% EC words.
      */
-    var errorCorrectionLevel: ZXQRCodeErrorCorrectionLevel?
+    // TODO
+    //var errorCorrectionLevel: ZXQRCodeErrorCorrectionLevel?
     /**
      * Specifies what degree of error correction to use, for example in PDF417 Codes.
      * For PDF417 valid values are 0 to 8.
@@ -87,7 +75,8 @@ class ZXEncodeHints: NSObject {
     /**
      * Specifies the minimum and maximum number of rows and columns for PDF417.
      */
-    var pdf417Dimensions: ZXPDF417Dimensions?
+    // TODO
+    //var pdf417Dimensions: ZXPDF417Dimensions?
     /**
      * Specifies the required number of layers for an Aztec code:
      *   a negative number (-1, -2, -3, -4) specifies a compact Aztec code
@@ -104,8 +93,4 @@ class ZXEncodeHints: NSObject {
      * Specifies whether the data should be encoded to the GS1 standard.
      */
     var gs1Format = false
-    
-    convenience init() {
-        self.init()
-    }
 }

@@ -6,27 +6,19 @@
 // - Date: 01.10.18
 //
 // 
-    
+
 
 import Foundation
 
-class ZXByteMatrix: NSObject {
-    private(set) var array = []
+class ZXByteMatrix {
+    private(set) var array: [[Int8]]
     private(set) var height: Int = 0
     private(set) var width: Int = 0
     
     init(width: Int, height: Int) {
-        //if super.init()
-        
         self.width = width
         self.height = height
-        
-        array = Int8(malloc(height * MemoryLayout<Int8>.size))
-        for i in 0..<height {
-            array[i] = Int8(malloc(width * MemoryLayout<Int8>.size))
-        }
-        clear(0)
-        
+        self.array = [[Int8]](repeating: [Int8](repeating: 0, count: height), count: width)
     }
     
     func getX(_ x: Int, y: Int) -> Int8 {
@@ -42,7 +34,7 @@ class ZXByteMatrix: NSObject {
     }
     
     func setX(_ x: Int, y: Int, boolValue value: Bool) {
-        array[y][x] = Int8(value)
+        array[y][x] = (value ? 1 : 0)
     }
     
     func clear(_ value: Int8) {
@@ -52,18 +44,10 @@ class ZXByteMatrix: NSObject {
             }
         }
     }
-    
-    deinit {
-        if array != nil {
-            for i in 0..<height {
-                free(array)
-            }
-            free(array)
-            array = nil
-        }
-    }
-    
-    override class func description() -> String {
+}
+
+extension ZXByteMatrix: CustomStringConvertible {
+    var description: String {
         var result = ""
         
         for y in 0..<height {

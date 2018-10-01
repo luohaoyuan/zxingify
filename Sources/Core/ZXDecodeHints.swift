@@ -33,7 +33,7 @@ struct ZXDecodeHints {
     /**
      * Specifies what character encoding to use when decoding, where applicable (type String)
      */
-    var encoding: NSStringEncoding?
+    var encoding: String.Encoding?
     /**
      * Unspecified, application-specific hint.
      */
@@ -52,7 +52,8 @@ struct ZXDecodeHints {
      * The caller needs to be notified via callback when a possible ZXResultPoint
      * is found.
      */
-    weak var resultPointCallback: ZXResultPointCallback?
+    // TODO
+    // weak var resultPointCallback: ZXResultPointCallback?
     /**
      * Spend more time to try to find a barcode; optimize for accuracy, not speed.
      */
@@ -70,13 +71,9 @@ struct ZXDecodeHints {
      */
     var substitutions: [AnyHashable : Any] = [:]
     
-    private var barcodeFormats: [AnyHashable] = []
+    private var barcodeFormats: [ZXBarcodeFormat] = []
     
-    convenience init() {
-        self.init()
-    }
-    
-    func addPossibleFormat(_ format: ZXBarcodeFormat) {
+    mutating func addPossibleFormat(_ format: ZXBarcodeFormat) {
         barcodeFormats.append(format)
     }
     
@@ -88,35 +85,7 @@ struct ZXDecodeHints {
         return barcodeFormats.count
     }
     
-    func removePossibleFormat(_ format: ZXBarcodeFormat) {
+    mutating func removePossibleFormat(_ format: ZXBarcodeFormat) {
         barcodeFormats.removeAll(where: { element in element == format })
-    }
-    
-    override init() {
-        //if super.init()
-        
-        barcodeFormats = [AnyHashable]()
-        
-    }
-    
-    func copy(with zone: NSZone? = nil) -> Any {
-        let result: ZXDecodeHints? = alloc(with: zone)()
-        if result != nil {
-            result?.assumeCode39CheckDigit = assumeCode39CheckDigit
-            result?.allowedLengths = allowedLengths
-            
-            for formatNumber: NSNumber in barcodeFormats as? [NSNumber] ?? [] {
-                result?.addPossibleFormat(Int(formatNumber))
-            }
-            
-            result?.encoding = encoding
-            result?.other = other
-            result?.pureBarcode = pureBarcode
-            result?.returnCodaBarStartEnd = returnCodaBarStartEnd
-            result?.resultPointCallback = resultPointCallback
-            result?.tryHarder = tryHarder
-        }
-        
-        return result!
     }
 }
