@@ -44,7 +44,7 @@ class ZXBitSource {
      * @throws ZXError.invalidArgumentException if numBits isn't in [1,32] or more than is available
      */
     func readBits(_ numBits: Int) throws -> Int {
-        if numBits < 1 || numBits > 32 || numBits > available() {
+        if numBits < 1 || numBits > 32 || numBits > available {
             throw ZXError.invalidArgumentException("Invalid number of bits: \(numBits)")
         }
         
@@ -89,7 +89,7 @@ class ZXBitSource {
     /**
      * @return number of bits that can be read successfully
      */
-    func available() -> Int {
+    var available: Int {
         return 8 * (bytes.length - byteOffset) - bitOffset
     }
 }

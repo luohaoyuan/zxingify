@@ -45,7 +45,7 @@ class ZXBitMatrix {
     }
 
     init(width: Int, height: Int) throws {
-        if width < 1 || height < 1 {
+        guard width > 0 && height > 0 else {
             throw ZXError.invalidArgumentException("Both dimensions must be greater than 0")
         }
         self.width = width
@@ -254,7 +254,7 @@ class ZXBitMatrix {
         let height: Int = self.height
         var topRow = ZXBitArray(size: width)
         var bottomRow = ZXBitArray(size: width)
-        for i in 0..<(height + 1) / 2 {
+        for i in 0 ..< (height + 1) / 2 {
             topRow = rowAt(y: i, row: topRow)
             bottomRow = rowAt(y: height - 1 - i, row: bottomRow)
             topRow.reverse()
@@ -275,8 +275,8 @@ class ZXBitMatrix {
         var right: Int = -1
         var bottom: Int = -1
         
-        for y in 0..<self.height {
-            for x32 in 0..<rowSize {
+        for y in 0 ..< self.height {
+            for x32 in 0 ..< rowSize {
                 let theBits = Int32(bits[y * rowSize + x32])
                 if Int(theBits) != 0 {
                     if y < top {
@@ -372,10 +372,9 @@ class ZXBitMatrix {
      * @deprecated call descriptionWithSetString:unsetString: only, which uses \n line separator always
      */
     func description(withSetString setString: String, unsetString: String, lineSeparator: String) -> String {
-        // var result = String(repeating: "\0", count: height * (width + 1))
         var result = ""
-        for y in 0..<height {
-            for x in 0..<width {
+        for y in 0 ..< height {
+            for x in 0 ..< width {
                 result += getX(x, y: y) ? setString : unsetString
             }
             result += lineSeparator
