@@ -41,11 +41,11 @@ class ZXBitSource {
      * @param numBits number of bits to read
      * @return int representing the bits read. The bits will appear as the least-significant
      *         bits of the int
-     * @throws NSInvalidArgumentException if numBits isn't in [1,32] or more than is available
+     * @throws ZXError.invalidArgumentException if numBits isn't in [1,32] or more than is available
      */
     func readBits(_ numBits: Int) throws -> Int {
         if numBits < 1 || numBits > 32 || numBits > available() {
-            // NSException.raise(NSExceptionName.invalidArgumentException, format: "Invalid number of bits: %d", numBits)
+            throw ZXError.invalidArgumentException("Invalid number of bits: \(numBits)")
         }
         
         var numBits = numBits

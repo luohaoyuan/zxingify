@@ -169,12 +169,12 @@ class ZXBitArray {
      * @param end end of range, exclusive
      * @param value if true, checks that bits in range are set, otherwise checks that they are not set
      * @return true iff all bits are set or not set in range, according to value argument
-     * @throws NSInvalidArgumentException if end is less than or equal to start
+     * @throws ZXError.invalidArgumentException if end is less than or equal to start
      */
     func isRange(_ start: Int, end: Int, value: Bool) throws -> Bool {
         var end = end
         if end < start || start < 0 || end > size {
-            throw NSException(name: .invalidArgumentException, reason: "Start greater than end", userInfo: nil) as! Error
+            throw ZXError.invalidArgumentException("Start greater than end")
         }
         if end == start {
             return true // empty range matches
