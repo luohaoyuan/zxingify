@@ -136,13 +136,13 @@ class ZXBitArray {
      * @param end end of range, exclusive
      */
     func setRange(_ start: Int, end: Int) throws {
-        var end = end
-        if end < start || start < 0 || end > size {
+        guard start >= 0 && end <= size && end >= start else {
             throw ZXError.invalidArgumentException("Start greater than end")
         }
         if end == start {
             return
         }
+        var end = end
         end -= 1 // will be easier to treat this as the last actually set bit -- inclusive
         let firstInt: Int32 = Int32(start) / 32
         let lastInt: Int32 = Int32(end) / 32
@@ -172,13 +172,13 @@ class ZXBitArray {
      * @throws ZXError.invalidArgumentException if end is less than or equal to start
      */
     func isRange(_ start: Int, end: Int, value: Bool) throws -> Bool {
-        var end = end
-        if end < start || start < 0 || end > size {
+        guard start >= 0 && end <= size && end >= start else {
             throw ZXError.invalidArgumentException("Start greater than end")
         }
         if end == start {
             return true // empty range matches
         }
+        var end = end
         end -= 1 // will be easier to treat this as the last actually set bit -- inclusive
         let firstInt: Int32 = Int32(start / 32)
         let lastInt: Int32 = Int32(end / 32)
@@ -215,7 +215,7 @@ class ZXBitArray {
      * @param numBits bits from value to append
      */
     func appendBits(_ value: Int32, numBits: Int) throws {
-        if numBits < 0 || numBits > 32 {
+        guard numBits >= 0 && numBits <= 32 else {
             throw ZXError.invalidArgumentException("Num bits must be between 0 and 32")
         }
         ensureCapacity(size + numBits)
@@ -226,19 +226,19 @@ class ZXBitArray {
         }
     }
     
-    func append(_ other: ZXBitArray?) {
-        let otherSize = other?.size
-        ensureCapacity(size + (otherSize ?? 0))
-        for i in 0..<(otherSize ?? 0) {
-            appendBit(other?.get(i) ?? false)
+    func append(_ other: ZXBitArray) {
+        let otherSize = other.size
+        ensureCapacity(size + otherSize)
+        for i in 0..<otherSize {
+            appendBit(other.get(i))
         }
     }
     
     func xor(_ other: ZXBitArray) throws {
-        if size != other.size {
+        guard size == other.size else {
             throw ZXError.invalidArgumentException("Sizes don't match")
         }
-        for i in 0..<bitsLength {
+        for i in 0 ..< bitsLength {
             // The last int could be incomplete (i.e. not have 32 bits in
             // it) but there is no problem since 0 XOR 0 == 0.
             bits[i] ^= other.bits[i]
