@@ -77,7 +77,7 @@ class ZXBitMatrix {
                     if rowLength == -1 {
                         rowLength = bitsPos - rowStartPos
                     } else if bitsPos - rowStartPos != rowLength {
-                        throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "row lengths do not match", userInfo: nil) as! Error
+                        throw ZXError.invalidArgumentException("row lengths do not match")
                     }
                     rowStartPos = bitsPos
                     nRows += 1
@@ -101,7 +101,7 @@ class ZXBitMatrix {
             if rowLength == -1 {
                 rowLength = bitsPos - rowStartPos
             } else if bitsPos - rowStartPos != rowLength {
-                throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "row lengths do not match", userInfo: nil) as! Error
+                throw ZXError.invalidArgumentException("row lengths do not match")
             }
             nRows += 1
         }

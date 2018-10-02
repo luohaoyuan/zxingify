@@ -138,7 +138,7 @@ class ZXBitArray {
     func setRange(_ start: Int, end: Int) throws {
         var end = end
         if end < start || start < 0 || end > size {
-            throw NSException(name: .invalidArgumentException, reason: "Start greater than end", userInfo: nil) as! Error
+            throw ZXError.invalidArgumentException("Start greater than end")
         }
         if end == start {
             return
@@ -216,7 +216,7 @@ class ZXBitArray {
      */
     func appendBits(_ value: Int32, numBits: Int) throws {
         if numBits < 0 || numBits > 32 {
-            throw NSException(name: .invalidArgumentException, reason: "Num bits must be between 0 and 32", userInfo: nil) as! Error
+            throw ZXError.invalidArgumentException("Num bits must be between 0 and 32")
         }
         ensureCapacity(size + numBits)
         var numBitsLeft = numBits
@@ -236,7 +236,7 @@ class ZXBitArray {
     
     func xor(_ other: ZXBitArray) throws {
         if size != other.size {
-            throw NSException(name: .invalidArgumentException, reason: "Sizes don't match", userInfo: nil) as! Error
+            throw ZXError.invalidArgumentException("Sizes don't match")
         }
         for i in 0..<bitsLength {
             // The last int could be incomplete (i.e. not have 32 bits in
