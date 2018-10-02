@@ -6,7 +6,7 @@
 // - Date: 30.09.18
 //
 // 
-    
+
 
 import Foundation
 
@@ -22,7 +22,7 @@ import Foundation
  * The ordering of bits is row-major. Within each NSInteger, the least significant bits are used first,
  * meaning they represent lower x values. This is compatible with BitArray's implementation.
  */
-class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
+class ZXBitMatrix {
     /**
      * @return The width of the matrix
      */
@@ -46,7 +46,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
 
     init(width: Int, height: Int) throws {
         if width < 1 || height < 1 {
-            throw NSException(name: .invalidArgumentException, reason: "Both dimensions must be greater than 0", userInfo: nil) as! Error
+            throw ZXError.invalidArgumentException("Both dimensions must be greater than 0")
         }
         self.width = width
         self.height = height
@@ -92,7 +92,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
                 bits.array[bitsPos] = false
                 bitsPos += 1
             } else {
-                throw NSException(name: NSExceptionName("IllegalArgumentException"), reason: "illegal character encountered: \((stringRepresentation as NSString).substring(from: pos))", userInfo: nil) as! NSError
+                throw ZXError.invalidArgumentException("illegal character encountered: \((stringRepresentation as NSString).substring(from: pos))")
             }
         }
         
@@ -162,7 +162,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      */
     func xor(_ mask: ZXBitMatrix) throws {
         if width != mask.width || height != mask.height || rowSize != mask.rowSize {
-            throw NSException(name: .invalidArgumentException, reason: "input matrix dimensions do not match", userInfo: nil) as! Error
+            throw ZXError.invalidArgumentException("input matrix dimensions do not match")
         }
         let rowArray = ZXBitArray(size: width)
         for y in 0 ..< height {
@@ -192,12 +192,12 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      */
     func setRegionAtLeft(left: Int, top: Int, width aWidth: Int, height aHeight: Int) throws {
         if aHeight < 1 || aWidth < 1 {
-            throw NSException(name: .invalidArgumentException, reason: "Height and width must be at least 1", userInfo: nil) as! Error
+            throw ZXError.invalidArgumentException("Height and width must be at least 1")
         }
         let right: Int = left + aWidth
         let bottom: Int = top + aHeight
         if bottom > height || right > width {
-            throw NSException(name: .invalidArgumentException, reason: "The region must fit inside the matrix", userInfo: nil) as! Error
+            throw ZXError.invalidArgumentException("The region must fit inside the matrix")
         }
         for y in top..<bottom {
             let offset: Int = y * rowSize
@@ -372,7 +372,8 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
      * @deprecated call descriptionWithSetString:unsetString: only, which uses \n line separator always
      */
     func description(withSetString setString: String, unsetString: String, lineSeparator: String) -> String {
-        var result = String(repeating: "\0", count: height * (width + 1))
+        // var result = String(repeating: "\0", count: height * (width + 1))
+        var result = ""
         for y in 0..<height {
             for x in 0..<width {
                 result += getX(x, y: y) ? setString : unsetString
@@ -382,11 +383,17 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         return result
     }
 
+    func clone() -> ZXBitMatrix {
+        return ZXBitMatrix(width: width, height: height, rowSize: rowSize, bits: bits)
+    }
+}
+
+extension ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
     // string representation using "X" for set and " " for unset bits
     var description: String {
         return description(withSetString: "X ", unsetString: "  ")
     }
-    
+
     var hashValue: Int {
         var hash: Int = width
         hash = 31 * hash + width
@@ -397,7 +404,7 @@ class ZXBitMatrix: CustomStringConvertible, Equatable, Hashable {
         }
         return hash
     }
-    
+
     static func == (lhs: ZXBitMatrix, rhs: ZXBitMatrix) -> Bool {
         for i in 0 ..< lhs.bitsSize {
             if lhs.bits[i] != rhs.bits[i] {

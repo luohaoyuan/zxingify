@@ -6,7 +6,7 @@
 // - Date: 30.09.18
 //
 // 
-    
+
 
 import XCTest
 @testable import zxingify
@@ -194,78 +194,78 @@ class ZXBitMatrixTestCase: XCTestCase {
         XCTAssertEqual(centerMatrix, try ZXBitMatrix.parse(stringRepresentation: "   \n x \n   \n", setString: "x", unsetString: " "))
         XCTAssertEqual(centerMatrix, try ZXBitMatrix.parse(stringRepresentation: "      \n  x   \n      \n", setString: "x ", unsetString: "  "))
 
-//        do {
-//            try ZXBitMatrix.parse(stringRepresentation: "   \n xy\n   \n", setString: "x", unsetString: " ")
-//            XCTFail("Failure expected")
-//        } catch {
-//            // good
-//        }
+        do {
+            try _ = ZXBitMatrix.parse(stringRepresentation: "   \n xy\n   \n", setString: "x", unsetString: " ")
+            XCTFail("Failure expected")
+        } catch {
+            // good
+        }
 
         XCTAssertEqual(emptyMatrix24, try ZXBitMatrix.parse(stringRepresentation: "  \n  \n  \n  \n", setString: "x", unsetString: " "))
         
-//        XCTAssertEqual(centerMatrix, try ZXBitMatrix.parse(stringRepresentation: centerMatrix.description(withSetString: "x", unsetString: "."), setString: "x", unsetString: "."))
+        XCTAssertEqual(centerMatrix, try ZXBitMatrix.parse(stringRepresentation: centerMatrix.description(withSetString: "x", unsetString: "."), setString: "x", unsetString: "."))
     }
     
-//    func testUnset() throws {
-//        let emptyMatrix = ZXBitMatrix(width: 3, height: 3)
-//        let matrix: ZXBitMatrix? = emptyMatrix.copy()
-//        matrix?.setX(1, y: 1)
-//        XCTAssertNotEqualObjects(emptyMatrix, matrix)
-//        matrix?.unsetX(1, y: 1)
-//        XCTAssertEqual(emptyMatrix, matrix)
-//        matrix?.unsetX(1, y: 1)
-//        XCTAssertEqual(emptyMatrix, matrix)
-//    }
-//
-//    func testXOR() throws {
-//        let emptyMatrix = try ZXBitMatrix(width: 3, height: 3)
-//        let fullMatrix = try ZXBitMatrix(width: 3, height: 3)
-//        try fullMatrix.setRegionAtLeft(left: 0, top: 0, width: 3, height: 3)
-//        let centerMatrix = try ZXBitMatrix(width: 3, height: 3)
-//        centerMatrix.setRegionAtLeft(left: 1, top: 1, width: 1, height: 1)
-//        let invertedCenterMatrix: ZXBitMatrix = fullMatrix.copy()
-//        try invertedCenterMatrix.unsetX(1, y: 1)
-//        let badMatrix = try ZXBitMatrix(width: 4, height: 4)
-//
-//        try testXOR(emptyMatrix, flip: emptyMatrix, expectedMatrix: emptyMatrix)
-//        try testXOR(emptyMatrix, flip: centerMatrix, expectedMatrix: centerMatrix)
-//        try testXOR(emptyMatrix, flip: fullMatrix, expectedMatrix: fullMatrix)
-//
-//        try testXOR(centerMatrix, flip: emptyMatrix, expectedMatrix: centerMatrix)
-//        try testXOR(centerMatrix, flip: centerMatrix, expectedMatrix: emptyMatrix)
-//        try testXOR(centerMatrix, flip: fullMatrix, expectedMatrix: invertedCenterMatrix)
-//
-//        try testXOR(invertedCenterMatrix, flip: emptyMatrix, expectedMatrix: invertedCenterMatrix)
-//        try testXOR(invertedCenterMatrix, flip: centerMatrix, expectedMatrix: fullMatrix)
-//        try testXOR(invertedCenterMatrix, flip: fullMatrix, expectedMatrix: centerMatrix)
-//
-//        try testXOR(fullMatrix, flip: emptyMatrix, expectedMatrix: fullMatrix)
-//        try testXOR(fullMatrix, flip: centerMatrix, expectedMatrix: invertedCenterMatrix)
-//        try testXOR(fullMatrix, flip: fullMatrix, expectedMatrix: emptyMatrix)
-//
-//        do {
-//            (emptyMatrix.copy() as? ZXBitMatrix)?.xor(badMatrix)
-//            XCTFail("Failure expected")
-//        } catch let expected {
-//            // good
-//        }
-//
-//        defer {
-//        }
-//        do {
-//            (badMatrix.copy() as? ZXBitMatrix)?.xor(emptyMatrix)
-//            XCTFail("Failure expected")
-//        } catch let expected {
-//            // good
-//        }
-//    }
-//
-//    func testXOR(_ dataMatrix: ZXBitMatrix?, flip flipMatrix: ZXBitMatrix?, expectedMatrix: ZXBitMatrix?) throws {
-//        let matrix: ZXBitMatrix? = dataMatrix?.copy()
-//        matrix?.xor(flipMatrix)
-//        XCTAssertEqual(expectedMatrix, matrix)
-//    }
-//
+    func testUnset() throws {
+        let emptyMatrix = try ZXBitMatrix(width: 3, height: 3)
+        let matrix: ZXBitMatrix = emptyMatrix.clone()
+        matrix.setX(1, y: 1)
+        XCTAssertNotEqual(emptyMatrix, matrix)
+        matrix.unsetX(1, y: 1)
+        XCTAssertEqual(emptyMatrix, matrix)
+        matrix.unsetX(1, y: 1)
+        XCTAssertEqual(emptyMatrix, matrix)
+    }
+
+    func testXOR() throws {
+        let emptyMatrix = try ZXBitMatrix(width: 3, height: 3)
+        let fullMatrix = try ZXBitMatrix(width: 3, height: 3)
+        try fullMatrix.setRegionAtLeft(left: 0, top: 0, width: 3, height: 3)
+        let centerMatrix = try ZXBitMatrix(width: 3, height: 3)
+        try centerMatrix.setRegionAtLeft(left: 1, top: 1, width: 1, height: 1)
+        let invertedCenterMatrix: ZXBitMatrix = fullMatrix.clone()
+        invertedCenterMatrix.unsetX(1, y: 1)
+        let badMatrix = try ZXBitMatrix(width: 4, height: 4)
+
+        try testXOR(emptyMatrix, flip: emptyMatrix, expectedMatrix: emptyMatrix)
+        try testXOR(emptyMatrix, flip: centerMatrix, expectedMatrix: centerMatrix)
+        try testXOR(emptyMatrix, flip: fullMatrix, expectedMatrix: fullMatrix)
+
+        try testXOR(centerMatrix, flip: emptyMatrix, expectedMatrix: centerMatrix)
+        try testXOR(centerMatrix, flip: centerMatrix, expectedMatrix: emptyMatrix)
+        try testXOR(centerMatrix, flip: fullMatrix, expectedMatrix: invertedCenterMatrix)
+
+        try testXOR(invertedCenterMatrix, flip: emptyMatrix, expectedMatrix: invertedCenterMatrix)
+        try testXOR(invertedCenterMatrix, flip: centerMatrix, expectedMatrix: fullMatrix)
+        try testXOR(invertedCenterMatrix, flip: fullMatrix, expectedMatrix: centerMatrix)
+
+        try testXOR(fullMatrix, flip: emptyMatrix, expectedMatrix: fullMatrix)
+        try testXOR(fullMatrix, flip: centerMatrix, expectedMatrix: invertedCenterMatrix)
+        try testXOR(fullMatrix, flip: fullMatrix, expectedMatrix: emptyMatrix)
+
+        do {
+            try emptyMatrix.clone().xor(badMatrix)
+            XCTFail("Failure expected")
+        } catch {
+            // good
+        }
+
+        defer {
+        }
+        do {
+            try badMatrix.clone().xor(emptyMatrix)
+            XCTFail("Failure expected")
+        } catch {
+            // good
+        }
+    }
+
+    func testXOR(_ dataMatrix: ZXBitMatrix, flip flipMatrix: ZXBitMatrix, expectedMatrix: ZXBitMatrix) throws {
+        let matrix: ZXBitMatrix = dataMatrix.clone()
+        try matrix.xor(flipMatrix)
+        XCTAssertEqual(expectedMatrix, matrix)
+    }
+
     func testRotate180Width(_ width: Int, height: Int) throws {
         let input: ZXBitMatrix = try self.input(withWidth: width, height: height)
         input.rotate180()
