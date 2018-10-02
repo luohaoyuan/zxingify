@@ -6,7 +6,7 @@
 // - Date: 30.09.18
 //
 // 
-    
+
 
 import Foundation
 
@@ -55,7 +55,7 @@ class ZXLuminanceSource: CustomStringConvertible {
      * @return An array containing the luminance data.
      */
     func rowAt(y: Int, row: ZXByteArray) throws -> ZXByteArray {
-        throw NSException(name: .internalInconsistencyException, reason: "You must override \(NSStringFromSelector(#function)) in a subclass", userInfo: nil) as! Error
+        throw ZXError.internalInconsistencyException("You must override \(#function) in a subclass")
     }
     
     /**
@@ -67,7 +67,7 @@ class ZXLuminanceSource: CustomStringConvertible {
      *         of the result.
      */
     func matrix() throws -> ZXByteArray {
-        throw NSException(name: .internalInconsistencyException, reason: "You must override \(NSStringFromSelector(#function)) in a subclass", userInfo: nil) as! Error
+        throw ZXError.internalInconsistencyException("You must override \(#function) in a subclass")
     }
     
     /**
@@ -81,7 +81,7 @@ class ZXLuminanceSource: CustomStringConvertible {
      * @return A cropped version of this object.
      */
     func crop(left: Int, top: Int, width: Int, height: Int) throws -> ZXLuminanceSource {
-        throw NSException(name: .internalInconsistencyException, reason: "This luminance source does not support cropping.", userInfo: nil) as! Error
+        throw ZXError.internalInconsistencyException("This luminance source does not support cropping.")
     }
     
     /**
@@ -99,7 +99,7 @@ class ZXLuminanceSource: CustomStringConvertible {
      * @return A rotated version of this object.
      */
     func rotateCounterClockwise() throws -> ZXLuminanceSource {
-        throw NSException(name: .internalInconsistencyException, reason: "This luminance source does not support rotation by 90 degrees.", userInfo: nil) as! Error
+        throw ZXError.internalInconsistencyException("This luminance source does not support rotation by 90 degrees.")
     }
     
     /**
@@ -109,7 +109,7 @@ class ZXLuminanceSource: CustomStringConvertible {
      * @return A rotated version of this object.
      */
     func rotateCounterClockwise45() throws -> ZXLuminanceSource {
-        throw NSException(name: .internalInconsistencyException, reason: "This luminance source does not support rotation by 45 degrees.", userInfo: nil) as! Error
+        throw ZXError.internalInconsistencyException("This luminance source does not support rotation by 45 degrees.")
     }
     
     var description: String {

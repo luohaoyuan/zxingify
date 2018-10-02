@@ -52,7 +52,7 @@ class ZXBinarizer: NSObject {
      * @return The array of bits for this row (true means black) or nil if row can't be binarized.
      */
     func blackRow(_ y: Int, row: ZXBitArray?) throws -> ZXBitArray? {
-        throw NSException(name: .internalInconsistencyException, reason: "You must override \(NSStringFromSelector(#function)) in a subclass", userInfo: nil) as! Error
+        throw ZXError.internalInconsistencyException("You must override \(#function) in a subclass")
     }
     
     /**
@@ -65,7 +65,7 @@ class ZXBinarizer: NSObject {
      * to make a matrix.
      */
     func blackMatrix() throws -> ZXBitMatrix? {
-        throw NSException(name: .internalInconsistencyException, reason: "You must override \(NSStringFromSelector(#function)) in a subclass", userInfo: nil) as! Error
+        throw ZXError.internalInconsistencyException("You must override \(#function) in a subclass")
     }
     
     /**
@@ -77,7 +77,7 @@ class ZXBinarizer: NSObject {
      * @return A new concrete Binarizer implementation object.
      */
     func createBinarizer(_ source: ZXLuminanceSource?) throws -> ZXBinarizer? {
-        throw NSException(name: .internalInconsistencyException, reason: "You must override \(NSStringFromSelector(#function)) in a subclass", userInfo: nil) as! Error
+        throw ZXError.internalInconsistencyException("You must override \(#function) in a subclass")
     }
     
     func createImage() throws -> CGImage? {

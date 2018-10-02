@@ -12,4 +12,5 @@ import Foundation
 
 enum ZXError: Error {
     case invalidArgumentException(String)
+    case internalInconsistencyException(String)
 }
