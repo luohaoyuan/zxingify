@@ -12,6 +12,7 @@ import Foundation
 import CoreGraphics
 import CoreImage
 import QuartzCore
+import ImageIO
 
 class ZXCGImageLuminanceSource: ZXLuminanceSource {
     private var image: CGImage
