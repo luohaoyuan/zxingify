@@ -21,6 +21,14 @@
 		4B497DB72161723800F366F1 /* ZXBitMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B497DB52161723800F366F1 /* ZXBitMatrix.swift */; };
 		4B497DB92161726D00F366F1 /* ZXBitMatrixTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B497DB82161726D00F366F1 /* ZXBitMatrixTestCase.swift */; };
 		4B497DBA2161726D00F366F1 /* ZXBitMatrixTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B497DB82161726D00F366F1 /* ZXBitMatrixTestCase.swift */; };
+		4B538DF62166BC1A000ACBF6 /* ZXPlanarYUVLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DF52166BC1A000ACBF6 /* ZXPlanarYUVLuminanceSource.swift */; };
+		4B538DF72166BC1A000ACBF6 /* ZXPlanarYUVLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DF52166BC1A000ACBF6 /* ZXPlanarYUVLuminanceSource.swift */; };
+		4B538DF92166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DF82166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift */; };
+		4B538DFA2166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DF82166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift */; };
+		4B538DFD2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DFC2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift */; };
+		4B538DFE2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DFC2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift */; };
+		4B538E002166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DFF2166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift */; };
+		4B538E012166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DFF2166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift */; };
 		4B7D3A7E2160C7390075D468 /* ZXBitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */; };
 		4B7D3A7F2160C7390075D468 /* ZXBitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */; };
 		4B7D3A812160C9D20075D468 /* ZXByteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A802160C9D20075D468 /* ZXByteArray.swift */; };
@@ -84,6 +92,10 @@
 		4B497DB221616CF500F366F1 /* ZXIntArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXIntArray.swift; sourceTree = "<group>"; };
 		4B497DB52161723800F366F1 /* ZXBitMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitMatrix.swift; sourceTree = "<group>"; };
 		4B497DB82161726D00F366F1 /* ZXBitMatrixTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitMatrixTestCase.swift; sourceTree = "<group>"; };
+		4B538DF52166BC1A000ACBF6 /* ZXPlanarYUVLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXPlanarYUVLuminanceSource.swift; sourceTree = "<group>"; };
+		4B538DF82166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXRGBLuminanceSource.swift; sourceTree = "<group>"; };
+		4B538DFC2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXRGBLuminanceSourceTestCase.swift; sourceTree = "<group>"; };
+		4B538DFF2166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXPlanarYUVLuminanceSourceTestCase.swift; sourceTree = "<group>"; };
 		4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitArray.swift; sourceTree = "<group>"; };
 		4B7D3A802160C9D20075D468 /* ZXByteArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXByteArray.swift; sourceTree = "<group>"; };
 		4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXLuminanceSource.swift; sourceTree = "<group>"; };
@@ -145,6 +157,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B538DFB2166BC76000ACBF6 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				4B538DFF2166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift */,
+				4B538DFC2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		4B7D3A7C2160C72A0075D468 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -202,9 +223,11 @@
 				4B325FA22162A85200B77A19 /* ZXEncodeHints.swift */,
 				4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */,
 				4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */,
+				4B538DF52166BC1A000ACBF6 /* ZXPlanarYUVLuminanceSource.swift */,
 				4BCD497A215F72950004869A /* ZXReader.swift */,
 				4BCD497D215F73020004869A /* ZXResult.swift */,
 				4BC0568C21602318006727A4 /* ZXResultMetadataType.swift */,
+				4B538DF82166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift */,
 				4B325F9F2162A81800B77A19 /* ZXWriter.swift */,
 			);
 			path = Core;
@@ -214,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				4BD97E1B2160E83A007D58CA /* Common */,
+				4B538DFB2166BC76000ACBF6 /* Core */,
 				4BB231B1215FC0AA00ECFEE8 /* Resources */,
 				4BCD498A215F75870004869A /* ZXResultTest.swift */,
 				4BCD499B215F75DF0004869A /* Info-iOS-Tests.plist */,
@@ -412,10 +436,12 @@
 				4BCD4981215F732D0004869A /* ZXBinaryBitmap.swift in Sources */,
 				4B7D3A8D2160D6DB0075D468 /* ZXBoolArray.swift in Sources */,
 				4B325F9A2162A37100B77A19 /* ZXBinarizer.swift in Sources */,
+				4B538DF92166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift in Sources */,
 				4B7D3A842160CC980075D468 /* ZXLuminanceSource.swift in Sources */,
 				4B7D3A812160C9D20075D468 /* ZXByteArray.swift in Sources */,
 				4BCD497E215F73020004869A /* ZXResult.swift in Sources */,
 				4B9B1C4D216362A200135DFC /* ZXError.swift in Sources */,
+				4B538DF62166BC1A000ACBF6 /* ZXPlanarYUVLuminanceSource.swift in Sources */,
 				4B7D3A7E2160C7390075D468 /* ZXBitArray.swift in Sources */,
 				4BB231AF215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */,
 				4B325F9D2162A77700B77A19 /* ZXByteMatrix.swift in Sources */,
@@ -438,10 +464,12 @@
 				4BCD4982215F732D0004869A /* ZXBinaryBitmap.swift in Sources */,
 				4B7D3A8E2160D6DB0075D468 /* ZXBoolArray.swift in Sources */,
 				4B325F9B2162A37100B77A19 /* ZXBinarizer.swift in Sources */,
+				4B538DFA2166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift in Sources */,
 				4B7D3A852160CC980075D468 /* ZXLuminanceSource.swift in Sources */,
 				4B7D3A822160C9D20075D468 /* ZXByteArray.swift in Sources */,
 				4BCD497F215F73020004869A /* ZXResult.swift in Sources */,
 				4B9B1C4E216362A200135DFC /* ZXError.swift in Sources */,
+				4B538DF72166BC1A000ACBF6 /* ZXPlanarYUVLuminanceSource.swift in Sources */,
 				4B7D3A7F2160C7390075D468 /* ZXBitArray.swift in Sources */,
 				4BB231B0215FC01B00ECFEE8 /* ZXDecodeHints.swift in Sources */,
 				4B325F9E2162A77700B77A19 /* ZXByteMatrix.swift in Sources */,
@@ -461,8 +489,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B497DBA2161726D00F366F1 /* ZXBitMatrixTestCase.swift in Sources */,
+				4B538E012166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift in Sources */,
 				4BCD498B215F75870004869A /* ZXResultTest.swift in Sources */,
 				4BD97E1E2160E84B007D58CA /* ZXBitArrayTestCase.swift in Sources */,
+				4B538DFE2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,8 +501,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B497DB92161726D00F366F1 /* ZXBitMatrixTestCase.swift in Sources */,
+				4B538E002166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift in Sources */,
 				4BCD49A2215F76390004869A /* ZXResultTest.swift in Sources */,
 				4BD97E1D2160E84B007D58CA /* ZXBitArrayTestCase.swift in Sources */,
+				4B538DFD2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
