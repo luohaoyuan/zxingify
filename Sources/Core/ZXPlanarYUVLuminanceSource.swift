@@ -19,9 +19,9 @@ import Foundation
  * YCbCr_420_SP and YCbCr_422_SP.
  */
 
-let THUMBNAIL_SCALE_FACTOR: Int = 2
-
 class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
+    let THUMBNAIL_SCALE_FACTOR: Int = 2
+    
     /**
      * @return width of image from renderThumbnail
      */
@@ -35,42 +35,42 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         return height / THUMBNAIL_SCALE_FACTOR
     }
     
-    private var yuvData: ZXByteArray?
+    private var yuvData: ZXByteArray
     private var dataWidth: Int = 0
     private var dataHeight: Int = 0
-    private var `left`: Int = 0
+    private var left: Int = 0
     private var top: Int = 0
     
-    init(yuvData: UnsafeMutablePointer<Int8>?, yuvDataLen: Int, dataWidth: Int, dataHeight: Int, left `left`: Int, top: Int, width: Int, height: Int, reverseHorizontal: Bool) {
+    init(yuvData: [UInt8], yuvDataLen: Int, dataWidth: Int, dataHeight: Int, left: Int, top: Int, width: Int, height: Int, reverseHorizontal: Bool) throws {
         //if super.init(width: width, height: height)
         
-        if `left` + width > dataWidth || top + height > dataHeight {
-            NSException.raise(NSExceptionName.invalidArgumentException, format: "Crop rectangle does not fit within image data.")
+        if left + width > dataWidth || top + height > dataHeight {
+            throw ZXError.invalidArgumentException("Crop rectangle does not fit within image data.")
         }
         
         self.yuvData = ZXByteArray(length: yuvDataLen)
-        memcpy(self.yuvData.array, yuvData, yuvDataLen * MemoryLayout<Int8>.size)
+        // TODO
+        // memcpy(self.yuvData.array, yuvData, yuvDataLen * MemoryLayout<Int8>.size)
         self.dataWidth = dataWidth
         self.dataHeight = dataHeight
-        `left` = `left`
+        self.left = left
         self.top = top
         
         if reverseHorizontal {
             self.reverseHorizontal(width, height: height)
         }
-        
     }
     
-    func renderThumbnail() -> UnsafeMutablePointer<Int>? {
+    func renderThumbnail() -> [UInt8] {
         let thumbWidth: Int = width / THUMBNAIL_SCALE_FACTOR
         let thumbHeight: Int = height / THUMBNAIL_SCALE_FACTOR
-        let pixels = Int(malloc(thumbWidth * thumbHeight * MemoryLayout<Int>.size))
+        var pixels = [UInt8](repeating: 0, count: thumbWidth * thumbHeight)
         var inputOffset: Int = top * dataWidth + left
         
         for y in 0..<height {
             let outputOffset: Int = y * width
             for x in 0..<width {
-                let grey: Int = yuvData?.array[inputOffset + x * THUMBNAIL_SCALE_FACTOR] ?? 0 & 0xff
+                let grey: UInt8 = yuvData.array[inputOffset + x * THUMBNAIL_SCALE_FACTOR] & 0xff
                 pixels[outputOffset + x] = 0xff000000 | (grey * 0x00010101)
             }
             inputOffset += dataWidth * THUMBNAIL_SCALE_FACTOR
@@ -78,18 +78,20 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         return pixels
     }
     
-    func rowAt(y: Int, row: ZXByteArray?) -> ZXByteArray? {
+    override func rowAt(y: Int, row: ZXByteArray?) throws -> ZXByteArray {
         var row = row
         if y < 0 || y >= height {
-            NSException.raise(NSExceptionName.invalidArgumentException, format: "Requested row is outside the image: %d", y)
+            throw ZXError.invalidArgumentException("Requested row is outside the image: \(y)")
         }
         let width = self.width
         if row == nil || row?.length ?? 0 < width {
             row = ZXByteArray(length: width)
         }
         let offset: Int = (y + top) * dataWidth + left
-        memcpy(row?.array, yuvData?.array ?? 0 + offset, self.width * MemoryLayout<Int8>.size)
-        return row
+        // TODO
+        // memcpy(row?.array, yuvData?.array ?? 0 + offset, self.width * MemoryLayout<Int8>.size)
+        // TODO
+        return row!
     }
     
     func matrix() -> ZXByteArray? {
@@ -108,7 +110,8 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         
         // If the width matches the full width of the underlying data, perform a single copy.
         if self.width == dataWidth {
-            memcpy(matrix?.array, self.yuvData?.array ?? 0 + inputOffset, (area - inputOffset) * MemoryLayout<Int8>.size)
+            // TODO
+            // memcpy(matrix?.array, self.yuvData?.array ?? 0 + inputOffset, (area - inputOffset) * MemoryLayout<Int8>.size)
             return matrix
         }
         
@@ -116,7 +119,8 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         let yuvData: ZXByteArray? = self.yuvData
         for y in 0..<self.height {
             let outputOffset: Int = y * self.width
-            memcpy(matrix?.array ?? 0 + outputOffset, yuvData?.array ?? 0 + inputOffset, self.width * MemoryLayout<Int8>.size)
+            // TODO
+            // memcpy(matrix?.array ?? 0 + outputOffset, yuvData?.array ?? 0 + inputOffset, self.width * MemoryLayout<Int8>.size)
             inputOffset += dataWidth
         }
         return matrix
@@ -126,22 +130,25 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         return true
     }
     
-    func crop(_ `left`: Int, top: Int, width: Int, height: Int) -> ZXLuminanceSource? {
-        return self.init(yuvData: yuvData?.array ?? 0, yuvDataLen: yuvData?.length ?? 0, dataWidth: dataWidth, dataHeight: dataHeight, left: self.`left` + `left`, top: self.top + top, width: width, height: height, reverseHorizontal: false)
+    override func crop(left: Int, top: Int, width: Int, height: Int) throws -> ZXLuminanceSource {
+        return ZXPlanarYUVLuminanceSource(yuvData: yuvData.array, yuvDataLen: yuvData.length, dataWidth: dataWidth, dataHeight: dataHeight, left: self.left + left, top: self.top + top, width: width, height: height, reverseHorizontal: false)
     }
     
+    // TODO
     func reverseHorizontal(_ width: Int, height: Int) {
         var y = 0, rowStart = top * dataWidth + left
         while y < height {
             let middle: Int = rowStart + width / 2
             var x1 = rowStart, x2 = rowStart + width - 1
             while x1 < middle {
-                let temp = yuvData?.array[x1]
-                yuvData?.array[x1] = yuvData?.array[x2]
-                yuvData?.array[x2] = temp
-                x1 += 1, x2 -= 1
+                let temp = yuvData.array[x1]
+                yuvData.array[x1] = yuvData.array[x2]
+                yuvData.array[x2] = temp
+                x1 += 1
+                x2 -= 1
             }
-            y += 1, rowStart += dataWidth
+            y += 1
+            rowStart += dataWidth
         }
     }
 }

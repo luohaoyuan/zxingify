@@ -9,6 +9,7 @@
 
 
 import Foundation
+import CoreGraphics
 
 struct ZXResult {
     let text: String
