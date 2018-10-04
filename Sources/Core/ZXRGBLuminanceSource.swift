@@ -16,18 +16,16 @@ import Foundation
  */
 
 class ZXRGBLuminanceSource: ZXLuminanceSource {
-    private var luminances: ZXByteArray?
+    private var luminances: ZXByteArray
     private var dataWidth: Int = 0
     private var dataHeight: Int = 0
-    private var `left`: Int = 0
+    private var left: Int = 0
     private var top: Int = 0
     
-    init(width: Int, height: Int, pixels: UnsafeMutablePointer<Int>?, pixelsLen: Int) {
-        //if super.init(width: width, height: height)
-        
+    init(width: Int, height: Int, pixels: [UInt8], pixelsLen: Int) {
         dataWidth = width
         dataHeight = height
-        `left` = 0
+        left = 0
         top = 0
         
         // In order to measure pure decoding speed, we convert the entire image to a greyscale array
@@ -35,55 +33,50 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
         let size: Int = width * height
         luminances = ZXByteArray(length: size)
         for offset in 0..<size {
-            let pixel = Int(pixels?[offset] ?? 0)
-            let r: Int = ((pixel ?? 0) >> 16) & 0xff // red
-            let g2: Int = ((pixel ?? 0) >> 7) & 0x1fe // 2 * green
-            let b: Int = (pixel ?? 0) & 0xff // blue
+            let pixel = Int(pixels[offset])
+            let r: Int = (pixel >> 16) & 0xff // red
+            let g2: Int = (pixel >> 7) & 0x1fe // 2 * green
+            let b: Int = pixel & 0xff // blue
             // Calculate green-favouring average cheaply
-            luminances?.array[offset] = Int8((r + g2 + b) / 4)
+            luminances.array[offset] = UInt8((r + g2 + b) / 4)
         }
         
     }
     
-    init(pixels: UnsafeMutablePointer<Int8>?, width: Int, height: Int) {
-        //if super.init(width: width, height: height)
-        
+    init(pixels: [UInt8], width: Int, height: Int) {
         dataWidth = width
         dataHeight = height
-        `left` = 0
+        left = 0
         top = 0
-        luminances = ZXByteArray(array: pixels, length: width * height)
-        
+        luminances = ZXByteArray(array: pixels)
     }
     
-    init(pixels: ZXByteArray?, dataWidth: Int, dataHeight: Int, left `left`: Int, top: Int, width: Int, height: Int) {
-        var left = left
-        //if super.init(width: width, height: height)
-        
-        if `left` + self.width > dataWidth || top + self.height > dataHeight {
-            NSException.raise(NSExceptionName.invalidArgumentException, format: "Crop rectangle does not fit within image data.")
+    init(pixels: ZXByteArray, dataWidth: Int, dataHeight: Int, left: Int, top: Int, width: Int, height: Int) throws {
+        if left + self.width > dataWidth || top + self.height > dataHeight {
+            throw ZXError.invalidArgumentException("Crop rectangle does not fit within image data.")
         }
         
         luminances = pixels
         self.dataWidth = dataWidth
         self.dataHeight = dataHeight
-        `left` = `left`
+        self.left = left
         self.top = top
-        
     }
     
-    func rowAt(y: Int, row: ZXByteArray?) -> ZXByteArray? {
+    override func rowAt(y: Int, row: ZXByteArray?) throws -> ZXByteArray {
         var row = row
         if y < 0 || y >= height {
-            NSException.raise(NSExceptionName.invalidArgumentException, format: "Requested row is outside the image: %d", y)
+            throw ZXError.invalidArgumentException("Requested row is outside the image: \(y)")
         }
         let width = self.width
         if row == nil || row?.length ?? 0 < width {
             row = ZXByteArray(length: width)
         }
         let offset: Int = (y + top) * dataWidth + left
-        memcpy(row?.array, luminances?.array ?? 0 + offset, self.width * MemoryLayout<Int8>.size)
-        return row
+        // TODO
+        // memcpy(row?.array, luminances?.array ?? 0 + offset, self.width * MemoryLayout<Int8>.size)
+        // TODO
+        return row!
     }
     
     func matrix() -> ZXByteArray? {
@@ -102,14 +95,16 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
         
         // If the width matches the full width of the underlying data, perform a single copy.
         if self.width == dataWidth {
-            memcpy(matrix?.array, luminances?.array ?? 0 + inputOffset, area * MemoryLayout<Int8>.size)
+            // TODO
+            // memcpy(matrix?.array, luminances?.array ?? 0 + inputOffset, area * MemoryLayout<Int8>.size)
             return matrix
         }
         
         // Otherwise copy one cropped row at a time.
         for y in 0..<self.height {
             let outputOffset: Int = y * self.width
-            memcpy(matrix?.array ?? 0 + outputOffset, luminances?.array ?? 0 + inputOffset, self.width * MemoryLayout<Int8>.size)
+            // TODO
+            // memcpy(matrix?.array ?? 0 + outputOffset, luminances?.array ?? 0 + inputOffset, self.width * MemoryLayout<Int8>.size)
             inputOffset += dataWidth
         }
         return matrix
@@ -119,7 +114,7 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
         return true
     }
     
-    func crop(_ `left`: Int, top: Int, width: Int, height: Int) -> ZXLuminanceSource? {
-        return self.init(pixels: luminances, dataWidth: dataWidth, dataHeight: dataHeight, left: self.`left` + `left`, top: self.top + top, width: width, height: height)
+    override func crop(left: Int, top: Int, width: Int, height: Int) throws -> ZXLuminanceSource {
+        return try ZXRGBLuminanceSource(pixels: luminances, dataWidth: dataWidth, dataHeight: dataHeight, left: self.left + left, top: self.top + top, width: width, height: height)
     }
 }

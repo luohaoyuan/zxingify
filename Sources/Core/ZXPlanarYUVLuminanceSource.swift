@@ -131,7 +131,7 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
     }
     
     override func crop(left: Int, top: Int, width: Int, height: Int) throws -> ZXLuminanceSource {
-        return ZXPlanarYUVLuminanceSource(yuvData: yuvData.array, yuvDataLen: yuvData.length, dataWidth: dataWidth, dataHeight: dataHeight, left: self.left + left, top: self.top + top, width: width, height: height, reverseHorizontal: false)
+        return try ZXPlanarYUVLuminanceSource(yuvData: yuvData.array, yuvDataLen: yuvData.length, dataWidth: dataWidth, dataHeight: dataHeight, left: self.left + left, top: self.top + top, width: width, height: height, reverseHorizontal: false)
     }
     
     // TODO
