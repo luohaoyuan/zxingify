@@ -29,6 +29,8 @@
 		4B538DFE2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DFC2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift */; };
 		4B538E002166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DFF2166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift */; };
 		4B538E012166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538DFF2166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift */; };
+		4B538E032166BDD5000ACBF6 /* ZXCGImageLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538E022166BDD5000ACBF6 /* ZXCGImageLuminanceSource.swift */; };
+		4B538E042166BDD5000ACBF6 /* ZXCGImageLuminanceSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B538E022166BDD5000ACBF6 /* ZXCGImageLuminanceSource.swift */; };
 		4B7D3A7E2160C7390075D468 /* ZXBitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */; };
 		4B7D3A7F2160C7390075D468 /* ZXBitArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */; };
 		4B7D3A812160C9D20075D468 /* ZXByteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7D3A802160C9D20075D468 /* ZXByteArray.swift */; };
@@ -96,6 +98,7 @@
 		4B538DF82166BC4B000ACBF6 /* ZXRGBLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXRGBLuminanceSource.swift; sourceTree = "<group>"; };
 		4B538DFC2166BC84000ACBF6 /* ZXRGBLuminanceSourceTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXRGBLuminanceSourceTestCase.swift; sourceTree = "<group>"; };
 		4B538DFF2166BCA9000ACBF6 /* ZXPlanarYUVLuminanceSourceTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXPlanarYUVLuminanceSourceTestCase.swift; sourceTree = "<group>"; };
+		4B538E022166BDD5000ACBF6 /* ZXCGImageLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXCGImageLuminanceSource.swift; sourceTree = "<group>"; };
 		4B7D3A7D2160C7390075D468 /* ZXBitArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXBitArray.swift; sourceTree = "<group>"; };
 		4B7D3A802160C9D20075D468 /* ZXByteArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXByteArray.swift; sourceTree = "<group>"; };
 		4B7D3A832160CC980075D468 /* ZXLuminanceSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZXLuminanceSource.swift; sourceTree = "<group>"; };
@@ -219,6 +222,7 @@
 				4BC0568921602276006727A4 /* ZXBarcodeFormat.swift */,
 				4B325F992162A37100B77A19 /* ZXBinarizer.swift */,
 				4BCD4980215F732D0004869A /* ZXBinaryBitmap.swift */,
+				4B538E022166BDD5000ACBF6 /* ZXCGImageLuminanceSource.swift */,
 				4BB231AE215FC01B00ECFEE8 /* ZXDecodeHints.swift */,
 				4B325FA22162A85200B77A19 /* ZXEncodeHints.swift */,
 				4B7D3A862160CCE90075D468 /* ZXInvertedLuminanceSource.swift */,
@@ -447,6 +451,7 @@
 				4B325F9D2162A77700B77A19 /* ZXByteMatrix.swift in Sources */,
 				4B497DB321616CF500F366F1 /* ZXIntArray.swift in Sources */,
 				4B7D3A872160CCE90075D468 /* ZXInvertedLuminanceSource.swift in Sources */,
+				4B538E032166BDD5000ACBF6 /* ZXCGImageLuminanceSource.swift in Sources */,
 				4B325FA02162A81800B77A19 /* ZXWriter.swift in Sources */,
 				4BC0568D21602318006727A4 /* ZXResultMetadataType.swift in Sources */,
 				4BCD497B215F72950004869A /* ZXReader.swift in Sources */,
@@ -475,6 +480,7 @@
 				4B325F9E2162A77700B77A19 /* ZXByteMatrix.swift in Sources */,
 				4B497DB421616CF500F366F1 /* ZXIntArray.swift in Sources */,
 				4B7D3A882160CCE90075D468 /* ZXInvertedLuminanceSource.swift in Sources */,
+				4B538E042166BDD5000ACBF6 /* ZXCGImageLuminanceSource.swift in Sources */,
 				4B325FA12162A81800B77A19 /* ZXWriter.swift in Sources */,
 				4BC0568E21602318006727A4 /* ZXResultMetadataType.swift in Sources */,
 				4BCD497C215F72950004869A /* ZXReader.swift in Sources */,
