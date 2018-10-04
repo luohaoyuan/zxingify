@@ -9,6 +9,7 @@
     
 
 import Foundation
+import CoreGraphics
 
 class ZXCGImageLuminanceSource: ZXLuminanceSource {
     private var image: CGImageRef?
