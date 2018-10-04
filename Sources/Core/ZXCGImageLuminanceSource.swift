@@ -17,31 +17,31 @@ import ImageIO
 class ZXCGImageLuminanceSource: ZXLuminanceSource {
     private var image: CGImage
     private var data = []
-    private var left: size_t = 0
-    private var top: size_t = 0
+    private var left: Int = 0
+    private var top: Int = 0
     
-    class func createImage(from buffer: CVImageBuffer?) -> CGImage? {
+    class func createImage(from buffer: CVImageBuffer) -> CGImage? {
         return self.createImage(from: buffer, left: 0, top: 0, width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
     }
     
-    class func createImage(from buffer: CVImageBuffer?, left `left`: size_t, top: size_t, width: size_t, height: size_t) -> CGImage? {
+    class func createImage(from buffer: CVImageBuffer, left: Int, top: Int, width: Int, height: Int) -> CGImage? {
         let bytesPerRow = CVPixelBufferGetBytesPerRow(buffer)
         let dataWidth = CVPixelBufferGetWidth(buffer)
         let dataHeight = CVPixelBufferGetHeight(buffer)
         
-        if `left` + width > dataWidth || top + height > dataHeight {
+        if left + width > dataWidth || top + height > dataHeight {
             // TODO
             // NSException.raise(NSExceptionName.invalidArgumentException, format: "Crop rectangle does not fit within image data.")
         }
         
         let newBytesPerRow: size_t = ((Int(width * 4) + 0xf) >> 4) << 4
         
-        CVPixelBufferLockBaseAddress(buffer, 0)
+        CVPixelBufferLockBaseAddress(buffer, [])
         
-        let baseAddress = Int8(CVPixelBufferGetBaseAddress(buffer))
+        let baseAddress = CVPixelBufferGetBaseAddress(buffer)
         
         let size: size_t = newBytesPerRow * height
-        let bytes = Int8(malloc(size * MemoryLayout<Int8>.size))
+        // let bytes = Int8(malloc(size * MemoryLayout<Int8>.size))
         if newBytesPerRow == bytesPerRow {
             memcpy(bytes, baseAddress + top * bytesPerRow, size * MemoryLayout<Int8>.size)
         } else {

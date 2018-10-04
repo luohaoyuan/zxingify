@@ -14,10 +14,13 @@ import CoreImage
 import QuartzCore
 import ImageIO
 
+#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+#endif
+
 class ZXImage: NSObject {
-    private(set) var cgimage: CGImageRef?
+    private(set) var cgimage: CGImage
     
-    convenience init(matrix: ZXBitMatrix?) {
+    convenience init(matrix: ZXBitMatrix) {
         let colorSpace = CGColorSpaceCreateDeviceGray()
         
         let blackComponents = [0.0, 1.0]
@@ -31,7 +34,7 @@ class ZXImage: NSObject {
         CGColorRelease(black)
     }
     
-    convenience init(matrix: ZXBitMatrix?, on onColor: CGColor?, offColor: CGColor?) {
+    convenience init(matrix: ZXBitMatrix, on onColor: CGColor, offColor: CGColor) {
         let onIntensities = [UInt8](repeating: 0, count: 4)
         let offIntensities = [UInt8](repeating: 0, count: 4)
         
@@ -59,16 +62,11 @@ class ZXImage: NSObject {
         let zxImage = self.init(cgImageRef: image)
     }
     
-    init(cgImageRef image: CGImageRef?) {
-        //if super.init()
-        
-        cgimage = CGImageRetain(image)
+    init(cgImageRef image: CGImage) {
         
     }
     
     init(url: URL) {
-        //if super.init()
-        
         let provider = CGDataProviderCreateWithURL(url as? CFURL?)
         
         if provider != nil {
@@ -83,12 +81,12 @@ class ZXImage: NSObject {
         
     }
     
-    func width() -> size_t {
-        return CGImageGetWidth(cgimage)
+    var width: Int {
+        return cgimage.width
     }
     
-    func height() -> size_t {
-        return CGImageGetHeight(cgimage)
+    var height: Int {
+        return cgimage.height
     }
     
     class func setColorIntensities(_ intensities: UnsafeMutablePointer<UInt8>?, color: CGColor?) {
@@ -108,13 +106,4 @@ class ZXImage: NSObject {
             intensities?[3] = min(1.0, max(0, components?[1])) * 255
         }
     }
-    
-    deinit {
-        if cgimage != nil {
-            CGImageRelease(cgimage)
-        }
-    }
 }
-
-#if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
-#endif
