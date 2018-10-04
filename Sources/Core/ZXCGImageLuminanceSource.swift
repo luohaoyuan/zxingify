@@ -10,24 +10,27 @@
 
 import Foundation
 import CoreGraphics
+import CoreImage
+import QuartzCore
 
 class ZXCGImageLuminanceSource: ZXLuminanceSource {
-    private var image: CGImageRef?
+    private var image: CGImage
     private var data = []
-    private var `left`: size_t = 0
+    private var left: size_t = 0
     private var top: size_t = 0
     
-    class func createImage(from buffer: CVImageBuffer?) -> CGImageRef? {
+    class func createImage(from buffer: CVImageBuffer?) -> CGImage? {
         return self.createImage(from: buffer, left: 0, top: 0, width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
     }
     
-    class func createImage(from buffer: CVImageBuffer?, left `left`: size_t, top: size_t, width: size_t, height: size_t) -> CGImageRef? {
+    class func createImage(from buffer: CVImageBuffer?, left `left`: size_t, top: size_t, width: size_t, height: size_t) -> CGImage? {
         let bytesPerRow = CVPixelBufferGetBytesPerRow(buffer)
         let dataWidth = CVPixelBufferGetWidth(buffer)
         let dataHeight = CVPixelBufferGetHeight(buffer)
         
         if `left` + width > dataWidth || top + height > dataHeight {
-            NSException.raise(NSExceptionName.invalidArgumentException, format: "Crop rectangle does not fit within image data.")
+            // TODO
+            // NSException.raise(NSExceptionName.invalidArgumentException, format: "Crop rectangle does not fit within image data.")
         }
         
         let newBytesPerRow: size_t = ((Int(width * 4) + 0xf) >> 4) << 4
@@ -74,7 +77,7 @@ class ZXCGImageLuminanceSource: ZXLuminanceSource {
         
     }
     
-    convenience init(cgImage image: CGImageRef?) {
+    convenience init(cgImage image: CGImage?) {
         self.init(cgImage: image, left: 0, top: 0, width: CGImageGetWidth(image), height: CGImageGetHeight(image))
     }
     
