@@ -22,8 +22,8 @@ class ZXInvertedLuminanceSource: ZXLuminanceSource {
         super.init(width: delegate.width, height: delegate.height)
     }
     
-    override func rowAt(y: Int, row: ZXByteArray) throws -> ZXByteArray {
-        var row = row
+    override func rowAt(y: Int, row: ZXByteArray?) throws -> ZXByteArray {
+        var row = row!
         row = try delegate.rowAt(y: y, row: row)
         let width = self.width
         var rowArray = row.array

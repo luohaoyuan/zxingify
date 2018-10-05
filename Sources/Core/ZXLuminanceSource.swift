@@ -54,7 +54,7 @@ class ZXLuminanceSource: CustomStringConvertible {
      *            Always use the returned object, and ignore the .length of the array.
      * @return An array containing the luminance data.
      */
-    func rowAt(y: Int, row: ZXByteArray) throws -> ZXByteArray {
+    func rowAt(y: Int, row: ZXByteArray?) throws -> ZXByteArray {
         throw ZXError.internalInconsistencyException("You must override \(#function) in a subclass")
     }
     
