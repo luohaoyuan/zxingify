@@ -22,7 +22,7 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
     private var left: Int = 0
     private var top: Int = 0
     
-    init(width: Int, height: Int, pixels: [UInt8], pixelsLen: Int) {
+    init(width: Int, height: Int, pixels: [UInt32], pixelsLen: Int) {
         dataWidth = width
         dataHeight = height
         left = 0
@@ -33,10 +33,10 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
         let size: Int = width * height
         luminances = ZXByteArray(length: size)
         for offset in 0..<size {
-            let pixel = Int(pixels[offset])
-            let r: Int = (pixel >> 16) & 0xff // red
-            let g2: Int = (pixel >> 7) & 0x1fe // 2 * green
-            let b: Int = pixel & 0xff // blue
+            let pixel = pixels[offset]
+            let r = (pixel >> 16) & 0xff // red
+            let g2 = (pixel >> 7) & 0x1fe // 2 * green
+            let b = pixel & 0xff // blue
             // Calculate green-favouring average cheaply
             luminances.array[offset] = UInt8((r + g2 + b) / 4)
         }
@@ -76,13 +76,16 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
             row = ZXByteArray(length: width)
         }
         let offset: Int = (y + top) * dataWidth + left
+        for i in 0..<self.width {
+            row?.array[i] = luminances.array[i + offset]
+        }
         // TODO
         // memcpy(row?.array, luminances?.array ?? 0 + offset, self.width * MemoryLayout<Int8>.size)
         // TODO
         return row!
     }
     
-    func matrix() -> ZXByteArray? {
+    override func matrix() throws -> ZXByteArray {
         let width = self.width
         let height = self.height
         
@@ -99,6 +102,9 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
         // If the width matches the full width of the underlying data, perform a single copy.
         if self.width == dataWidth {
             // TODO
+            for i in 0..<area {
+                matrix.array[i] = luminances.array[i + inputOffset]
+            }
             // memcpy(matrix?.array, luminances?.array ?? 0 + inputOffset, area * MemoryLayout<Int8>.size)
             return matrix
         }
@@ -108,12 +114,15 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
             let outputOffset: Int = y * self.width
             // TODO
             // memcpy(matrix?.array ?? 0 + outputOffset, luminances?.array ?? 0 + inputOffset, self.width * MemoryLayout<Int8>.size)
+            for i in 0..<width {
+                matrix.array[i + outputOffset] = luminances.array[i + inputOffset]
+            }
             inputOffset += dataWidth
         }
         return matrix
     }
     
-    func cropSupported() -> Bool {
+    override var cropSupported: Bool {
         return true
     }
     

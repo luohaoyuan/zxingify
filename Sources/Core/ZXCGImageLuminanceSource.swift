@@ -99,19 +99,19 @@ class ZXCGImageLuminanceSource: ZXLuminanceSource {
         try self.init(cgImage: image)
     }
 
-    override func rowAt(y: Int, row: ZXByteArray) throws -> ZXByteArray {
+    override func rowAt(y: Int, row: ZXByteArray?) throws -> ZXByteArray {
         var row = row
         if y < 0 || y >= height {
             throw ZXError.invalidArgumentException("Requested row is outside the image: \(y)")
         }
         
-        if row == nil || row.length < width {
+        if row == nil || row?.length ?? 0 < width {
             row = ZXByteArray(length: width)
         }
         let offset: Int = y * width
         // TODO
         // memcpy(row?.array, data + offset, width * MemoryLayout<Int8>.size)
-        return row
+        return row!
     }
     
     override func matrix() throws -> ZXByteArray {
