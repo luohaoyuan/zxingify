@@ -42,8 +42,6 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
     private var top: Int = 0
     
     init(yuvData: [UInt8], yuvDataLen: Int, dataWidth: Int, dataHeight: Int, left: Int, top: Int, width: Int, height: Int, reverseHorizontal: Bool) throws {
-        //if super.init(width: width, height: height)
-        
         if left + width > dataWidth || top + height > dataHeight {
             throw ZXError.invalidArgumentException("Crop rectangle does not fit within image data.")
         }
@@ -55,9 +53,11 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         self.dataHeight = dataHeight
         self.left = left
         self.top = top
+
+        super.init(width: width, height: height)
         
         if reverseHorizontal {
-            self.reverseHorizontal(width, height: height)
+            self.reverseHorizontal(width: width, height: height)
         }
     }
     
@@ -71,7 +71,8 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
             let outputOffset: Int = y * width
             for x in 0..<width {
                 let grey: UInt8 = yuvData.array[inputOffset + x * THUMBNAIL_SCALE_FACTOR] & 0xff
-                pixels[outputOffset + x] = 0xff000000 | (grey * 0x00010101)
+                // TODO
+                pixels[outputOffset + x] = UInt8(bitPattern: Int8(0xff000000 | (Int(grey) * 0x00010101)))
             }
             inputOffset += dataWidth * THUMBNAIL_SCALE_FACTOR
         }
@@ -135,7 +136,7 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
     }
     
     // TODO
-    func reverseHorizontal(_ width: Int, height: Int) {
+    func reverseHorizontal(width: Int, height: Int) {
         var y = 0, rowStart = top * dataWidth + left
         while y < height {
             let middle: Int = rowStart + width / 2

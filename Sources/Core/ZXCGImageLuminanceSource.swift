@@ -16,7 +16,7 @@ import ImageIO
 
 class ZXCGImageLuminanceSource: ZXLuminanceSource {
     private var image: CGImage
-    private var data = []
+    private var data: [UInt8]
     private var left: Int = 0
     private var top: Int = 0
     
