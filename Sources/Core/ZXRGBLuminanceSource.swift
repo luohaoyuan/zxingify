@@ -40,7 +40,7 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
             // Calculate green-favouring average cheaply
             luminances.array[offset] = UInt8((r + g2 + b) / 4)
         }
-        
+        super.init(width: width, height: height)
     }
     
     init(pixels: [UInt8], width: Int, height: Int) {
@@ -49,18 +49,21 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
         left = 0
         top = 0
         luminances = ZXByteArray(array: pixels)
+        super.init(width: width, height: height)
     }
     
     init(pixels: ZXByteArray, dataWidth: Int, dataHeight: Int, left: Int, top: Int, width: Int, height: Int) throws {
-        if left + self.width > dataWidth || top + self.height > dataHeight {
+        if left + width > dataWidth || top + height > dataHeight {
             throw ZXError.invalidArgumentException("Crop rectangle does not fit within image data.")
         }
         
-        luminances = pixels
+        self.luminances = pixels
         self.dataWidth = dataWidth
         self.dataHeight = dataHeight
         self.left = left
         self.top = top
+
+        super.init(width: width, height: height)
     }
     
     override func rowAt(y: Int, row: ZXByteArray?) throws -> ZXByteArray {

@@ -137,7 +137,22 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
     
     // TODO
     func reverseHorizontal(width: Int, height: Int) {
+
+
+//        for (int y = 0, rowStart = self.top * self.dataWidth + self.left; y < height; y++, rowStart += self.dataWidth) {
+//            int middle = rowStart + width / 2;
+//            for (int x1 = rowStart, x2 = rowStart + width - 1; x1 < middle; x1++, x2--) {
+//                int8_t temp = self.yuvData.array[x1];
+//                self.yuvData.array[x1] = self.yuvData.array[x2];
+//                self.yuvData.array[x2] = temp;
+//            }
+//        }
+
+
         var y = 0, rowStart = top * dataWidth + left
+
+
+
         while y < height {
             let middle: Int = rowStart + width / 2
             var x1 = rowStart, x2 = rowStart + width - 1
