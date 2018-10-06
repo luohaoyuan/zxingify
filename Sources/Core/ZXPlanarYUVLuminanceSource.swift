@@ -47,8 +47,13 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         }
         
         self.yuvData = ZXByteArray(length: yuvDataLen)
+        
         // TODO
         // memcpy(self.yuvData.array, yuvData, yuvDataLen * MemoryLayout<Int8>.size)
+        for i in 0..<yuvDataLen {
+            self.yuvData.array[i] = yuvData[i]
+        }
+        
         self.dataWidth = dataWidth
         self.dataHeight = dataHeight
         self.left = left
