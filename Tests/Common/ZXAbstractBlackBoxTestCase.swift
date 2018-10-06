@@ -8,7 +8,8 @@
 // 
 
 
-import Foundation
+import XCTest
+@testable import zxingify
 
 class ZXAbstractBlackBoxTestCase: XCTestCase {
     private(set) weak var barcodeReader: ZXReader?
