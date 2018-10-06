@@ -106,18 +106,22 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
         let rotatedRect: CGRect = imgRect.applying(transform)
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let context = CGContext(data: nil, width: Int(rotatedRect.size.width), height: Int(rotatedRect.size.height), bitsPerComponent: CGImageGetBitsPerComponent(original.cgimage), bytesPerRow: 0, space: colorSpace, bitmapInfo: CGBitmapInfo.alphaInfoMask.rawValue & CGImageAlphaInfo.premultipliedFirst.rawValue)!
+        let context = CGContext(data: nil,
+                                width: Int(rotatedRect.size.width),
+                                height: Int(rotatedRect.size.height),
+                                bitsPerComponent: original.cgimage.bitsPerComponent,
+                                bytesPerRow: 0,
+                                space: colorSpace,
+                                bitmapInfo: CGBitmapInfo.alphaInfoMask.rawValue & CGImageAlphaInfo.premultipliedFirst.rawValue)!
         context.setAllowsAntialiasing(false)
         context.interpolationQuality = .none
         
         context.translateBy(x: +(rotatedRect.size.width / 2), y: +(rotatedRect.size.height / 2))
-        context.rotate(by: radians)
+        context.rotate(by: CGFloat(radians))
+        context.draw(original.cgimage, in: CGRect(x: -imgRect.size.width / 2, y: -imgRect.size.height / 2, width: imgRect.size.width, height: imgRect.size.height))
         
-        context.draw(in: original?.cgimage, image: CGRect(x: -imgRect.size.width / 2, y: -imgRect.size.height / 2, width: imgRect.size.width, height: imgRect.size.height))
-        
-        let rotatedImage = context.makeImage()
-        
-        return ZXImage(cgImageRef: rotatedImage)
+        let rotatedImage = context.makeImage()!
+        return ZXImage(cgImage: rotatedImage)
     }
     
     /**
