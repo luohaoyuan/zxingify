@@ -11,6 +11,10 @@
 import Foundation
 import CoreGraphics
 
+#if os(iOS)
+import UIKit
+#endif
+
 /**
  * This class hierarchy provides a set of methods to convert luminance data to 1 bit data.
  * It allows the algorithm to vary polymorphically, for example allowing a very expensive
@@ -18,7 +22,7 @@ import CoreGraphics
  * to vary, e.g. a JNI version for Android and a Java fallback version for other platforms.
  */
 class ZXBinarizer: NSObject {
-    #if TARGET_OS_EMBEDDED || TARGET_IPHONE_SIMULATOR
+    #if os(iOS)
     let ZXBlack = UIColor.black.cgColor
     let ZXWhite = UIColor.white.cgColor
     #else
