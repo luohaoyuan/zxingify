@@ -95,7 +95,7 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         return row!
     }
     
-    func matrix() -> ZXByteArray? {
+    override func matrix() throws -> ZXByteArray {
         let width = self.width
         let height = self.height
         
@@ -112,16 +112,21 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
         // If the width matches the full width of the underlying data, perform a single copy.
         if self.width == dataWidth {
             // TODO
+            for i in 0..<area {
+                matrix.array[i] = yuvData.array[i + inputOffset]
+            }
             // memcpy(matrix?.array, self.yuvData?.array ?? 0 + inputOffset, (area - inputOffset) * MemoryLayout<Int8>.size)
             return matrix
         }
         
         // Otherwise copy one cropped row at a time.
-        let yuvData: ZXByteArray? = self.yuvData
         for y in 0..<self.height {
             let outputOffset: Int = y * self.width
             // TODO
             // memcpy(matrix?.array ?? 0 + outputOffset, yuvData?.array ?? 0 + inputOffset, self.width * MemoryLayout<Int8>.size)
+            for i in 0..<width {
+                matrix.array[i + outputOffset] = yuvData.array[i + inputOffset]
+            }
             inputOffset += dataWidth
         }
         return matrix
