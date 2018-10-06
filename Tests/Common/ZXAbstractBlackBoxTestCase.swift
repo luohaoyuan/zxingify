@@ -12,62 +12,54 @@ import XCTest
 @testable import zxingify
 
 class ZXAbstractBlackBoxTestCase: XCTestCase {
-    private(set) weak var barcodeReader: ZXReader?
-    var expectedFormat: ZXBarcodeFormat?
+    private(set) var barcodeReader: ZXReader
+    var expectedFormat: ZXBarcodeFormat
     var testBase = ""
-    var testResults: [AnyHashable] = []
+    var testResults = [ZXTestResult]()
     
-    class func barcodeFormat(asString format: ZXBarcodeFormat) -> String? {
+    class func barcodeFormat(asString format: ZXBarcodeFormat) -> String {
         switch format {
-        case kBarcodeFormatAztec:
+        case .aztec:
             return "Aztec"
-        case kBarcodeFormatCodabar:
+        case .codabar:
             return "CODABAR"
-        case kBarcodeFormatCode39:
+        case .code39:
             return "Code 39"
-        case kBarcodeFormatCode93:
+        case .code93:
             return "Code 93"
-        case kBarcodeFormatCode128:
+        case .code128:
             return "Code 128"
-        case kBarcodeFormatDataMatrix:
+        case .dataMatrix:
             return "Data Matrix"
-        case kBarcodeFormatEan8:
+        case .ean8:
             return "EAN-8"
-        case kBarcodeFormatEan13:
+        case .ean13:
             return "EAN-13"
-        case kBarcodeFormatITF:
+        case .itf:
             return "ITF"
-        case kBarcodeFormatMaxiCode:
+        case .maxicode:
             return "MaxiCode"
-        case kBarcodeFormatPDF417:
+        case .pdf417:
             return "PDF417"
-        case kBarcodeFormatQRCode:
+        case .qrCode:
             return "QR Code"
-        case kBarcodeFormatRSS14:
+        case .rss14:
             return "RSS 14"
-        case kBarcodeFormatRSSExpanded:
+        case .rssExpanded:
             return "RSS EXPANDED"
-        case kBarcodeFormatUPCA:
+        case .upca:
             return "UPC-A"
-        case kBarcodeFormatUPCE:
+        case .upce:
             return "UPC-E"
-        case kBarcodeFormatUPCEANExtension:
+        case .upcEanExtension:
             return "UPC/EAN extension"
-        default:
-            break
         }
-        
-        return nil
     }
     
-    init(invocation: NSInvocation?, testBasePathSuffix: String?, barcodeReader: ZXReader?, expectedFormat: ZXBarcodeFormat) {
-        //if super.init(invocation: invocation)
-        
-        testBase = testBasePathSuffix ?? ""
+    init(testBasePathSuffix: String, barcodeReader: ZXReader, expectedFormat: ZXBarcodeFormat) {
+        testBase = testBasePathSuffix
         self.barcodeReader = barcodeReader
         self.expectedFormat = expectedFormat
-        testResults = [AnyHashable]()
-        
     }
     
     func addTest(_ mustPassCount: Int, tryHarderCount: Int, rotation: Float) {
@@ -84,7 +76,8 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
     
     func imageFiles() -> [Any]? {
         var imageFiles: [AnyHashable] = []
-        for file: String in Bundle(for: self).paths(forResourcesOfType: nil, inDirectory: testBase) {
+        // TODO Bundle(for: self)?
+        for file: String in Bundle.main.paths(forResourcesOfType: nil, inDirectory: testBase) {
             if ((URL(fileURLWithPath: file).pathExtension).lowercased() == "jpg") || ((URL(fileURLWithPath: file).pathExtension).lowercased() == "jpeg") || ((URL(fileURLWithPath: file).pathExtension).lowercased() == "gif") || ((URL(fileURLWithPath: file).pathExtension).lowercased() == "png") {
                 imageFiles.append(URL(fileURLWithPath: file))
             }
@@ -93,7 +86,7 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
         return imageFiles
     }
     
-    func readFile(as file: String?, encoding: NSStringEncoding) -> String? {
+    func readFile(as file: String?, encoding: String.Encoding) -> String? {
         let stringContents = try? String(contentsOfFile: file ?? "", encoding: encoding)
         if stringContents?.hasSuffix("\n") ?? false {
             print("String contents of file \(file ?? "") end with a newline. This may not be intended and cause a test failure")
@@ -102,20 +95,20 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
     }
     
     // Adapted from http://blog.coriolis.ch/2009/09/04/arbitrary-rotation-of-a-cgimage/ and https://github.com/JanX2/CreateRotateWriteCGImage
-    func rotateImage(_ original: ZXImage?, degrees: Float) -> ZXImage? {
+    func rotateImage(_ original: ZXImage, degrees: Float) -> ZXImage? {
         if degrees == 0.0 {
             return original
         }
         let radians = Double(-1 * degrees * (.pi / 180))
         
-        let imgRect = CGRect(x: 0, y: 0, width: original?.width ?? 0.0, height: original?.height ?? 0.0)
-        let transform = CGAffineTransform(rotationAngle: radians)
+        let imgRect = CGRect(x: 0, y: 0, width: original.width, height: original.height)
+        let transform = CGAffineTransform(rotationAngle: CGFloat(radians))
         let rotatedRect: CGRect = imgRect.applying(transform)
         
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let context = CGContext(data: nil, width: rotatedRect.size.width, height: rotatedRect.size.height, bitsPerComponent: CGImageGetBitsPerComponent(original?.cgimage), bytesPerRow: 0, space: colorSpace, bitmapInfo: CGBitmapInfo.alphaInfoMask.rawValue & CGImageAlphaInfo.premultipliedFirst.rawValue)
+        let context = CGContext(data: nil, width: Int(rotatedRect.size.width), height: Int(rotatedRect.size.height), bitsPerComponent: CGImageGetBitsPerComponent(original.cgimage), bytesPerRow: 0, space: colorSpace, bitmapInfo: CGBitmapInfo.alphaInfoMask.rawValue & CGImageAlphaInfo.premultipliedFirst.rawValue)!
         context.setAllowsAntialiasing(false)
-        CGContextSetInterpolationQuality(context, CGInterpolationQuality.none)
+        context.interpolationQuality = .none
         
         context.translateBy(x: +(rotatedRect.size.width / 2), y: +(rotatedRect.size.height / 2))
         context.rotate(by: radians)
@@ -130,12 +123,12 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
     /**
      * Adds a new test for the current directory of images.
      */
-    func path(inBundle file: URL?) -> String? {
-        let startOfResources = Int((file?.path as NSString?)?.range(of: "Resources").location ?? 0)
+    func path(inBundle file: URL) -> String {
+        let startOfResources = Int((file.path as NSString).range(of: "Resources").location)
         if startOfResources == NSNotFound {
-            return file?.path
+            return file.path
         } else {
-            return (file?.path as? NSString)?.substring(from: startOfResources)
+            return (file.path as NSString).substring(from: startOfResources)
         }
     }
     
