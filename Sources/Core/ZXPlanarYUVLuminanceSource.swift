@@ -94,9 +94,14 @@ class ZXPlanarYUVLuminanceSource: ZXLuminanceSource {
             row = ZXByteArray(length: width)
         }
         let offset: Int = (y + top) * dataWidth + left
+        
         // TODO
         // memcpy(row?.array, yuvData?.array ?? 0 + offset, self.width * MemoryLayout<Int8>.size)
         // TODO
+        for i in 0..<self.width {
+            row?.array[i] = yuvData.array[i + offset]
+        }
+        
         return row!
     }
     

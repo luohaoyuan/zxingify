@@ -76,12 +76,13 @@ class ZXRGBLuminanceSource: ZXLuminanceSource {
             row = ZXByteArray(length: width)
         }
         let offset: Int = (y + top) * dataWidth + left
-        for i in 0..<self.width {
-            row?.array[i] = luminances.array[i + offset]
-        }
+        
         // TODO
         // memcpy(row?.array, luminances?.array ?? 0 + offset, self.width * MemoryLayout<Int8>.size)
         // TODO
+        for i in 0..<self.width {
+            row?.array[i] = luminances.array[i + offset]
+        }
         return row!
     }
     
