@@ -6,7 +6,7 @@
 // - Date: 04.10.18
 //
 // 
-    
+
 
 import XCTest
 @testable import zxingify
@@ -31,33 +31,35 @@ class ZXRGBLuminanceSourceTestCase: XCTestCase {
         }
     }
     
-//    func testCropFullWidth() {
-//        let croppedFullWidth: ZXLuminanceSource? = SOURCE?.crop(0, top: 1, width: 3, height: 2)
-//        let matrix: ZXByteArray? = croppedFullWidth?.matrix()
-//        let pixels = [0x3f, 0x7f, 0x3f, 0x3f, 0x7f, 0x3f]
-//        for i in 0..<matrix?.length ?? 0 {
-//            XCTAssertEqual(matrix?.array[i], pixels[i])
-//        }
-//    }
-//
-//    func testCropCorner() {
-//        let croppedCorner: ZXLuminanceSource? = SOURCE?.crop(1, top: 1, width: 2, height: 2)
-//        let matrix: ZXByteArray? = croppedCorner?.matrix()
-//        let pixels = [0x7f, 0x3f, 0x7f, 0x3f]
-//        for i in 0..<matrix?.length ?? 0 {
-//            XCTAssertEqual(matrix?.array[i], pixels[i])
-//        }
-//    }
-//
-//    func testGetRow() {
-//        let row: ZXByteArray? = SOURCE?.rowAt(y: 2, row: nil)
-//        let pixels = [0x3f, 0x7f, 0x3f]
-//        for i in 0..<row?.length ?? 0 {
-//            XCTAssertEqual(row?.array[i], pixels[i])
-//        }
-//    }
-//
-//    func testDescription() {
-//        XCTAssertEqual("#+ \n#+#\n#+#\n", SOURCE?.description())
-//    }
+    func testCropFullWidth() throws {
+        let croppedFullWidth: ZXLuminanceSource = try ZXRGBLuminanceSourceTestCase.SOURCE.crop(left: 0, top: 1, width: 3, height: 2)
+        let matrix: ZXByteArray = try croppedFullWidth.matrix()
+        let pixels: [UInt8] = [0x3f, 0x7f, 0x3f, 0x3f, 0x7f, 0x3f]
+        for i in 0..<matrix.length {
+            XCTAssertEqual(matrix.array[i], pixels[i])
+        }
+    }
+    
+    func testCropCorner() throws {
+        let croppedCorner: ZXLuminanceSource = try ZXRGBLuminanceSourceTestCase.SOURCE.crop(left: 1, top: 1, width: 2, height: 2)
+        let matrix: ZXByteArray = try croppedCorner.matrix()
+        let pixels: [UInt8] = [0x7f, 0x3f, 0x7f, 0x3f]
+        for i in 0..<matrix.length {
+            XCTAssertEqual(matrix.array[i], pixels[i])
+        }
+    }
+    
+    func testGetRow() throws {
+        let row: ZXByteArray = try ZXRGBLuminanceSourceTestCase.SOURCE.rowAt(y: 2, row: nil)
+        let pixels: [UInt8] = [0x3f, 0x7f, 0x3f]
+        for i in 0..<row.length {
+            XCTAssertEqual(row.array[i], pixels[i])
+        }
+    }
+    
+    func testDescription() {
+        let expected = "#+ \n#+#\n#+#\n"
+        let actual = ZXRGBLuminanceSourceTestCase.SOURCE.description
+        XCTAssertEqual(expected, actual)
+    }
 }

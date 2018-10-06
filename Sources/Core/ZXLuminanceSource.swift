@@ -114,22 +114,22 @@ class ZXLuminanceSource: CustomStringConvertible {
     
     var description: String {
         var row = ZXByteArray(length: width)
-        var result = String(repeating: "\0", count: height * (width + 1))
+        var result = String()
         for y in 0..<height {
             row = try! self.rowAt(y: y, row: row)
             for x in 0..<width {
                 let luminance: Int = Int(row.array[x] & 0xff)
-                var c: unichar
+                var c: String
                 if luminance < 0x40 {
-                    c = unichar("#")!
+                    c = "#"
                 } else if luminance < 0x80 {
-                    c = unichar("+")!
+                    c = "+"
                 } else if luminance < 0xc0 {
-                    c = unichar(".")!
+                    c = "."
                 } else {
-                    c = unichar(" ")!
+                    c = " "
                 }
-                result += "\(c)"
+                result += c
             }
             result += "\n"
         }
