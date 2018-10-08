@@ -70,26 +70,24 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
         testResults.append(ZXTestResult(mustPassCount: mustPassCount, tryHarderCount: tryHarderCount, maxMisreads: maxMisreads, maxTryHarderMisreads: maxTryHarderMisreads, rotation: rotation))
     }
     
-    func runTests() {
-        testBlackBoxCountingResults(true)
+    func runTests() throws {
+        try testBlackBoxCountingResults(true)
     }
-    
-    func imageFiles() -> [Any]? {
-        var imageFiles: [AnyHashable] = []
+
+    var imageFiles: [URL] {
+        var imageFiles = [URL]()
         // TODO Bundle(for: self)?
         for file: String in Bundle.main.paths(forResourcesOfType: nil, inDirectory: testBase) {
             if ((URL(fileURLWithPath: file).pathExtension).lowercased() == "jpg") || ((URL(fileURLWithPath: file).pathExtension).lowercased() == "jpeg") || ((URL(fileURLWithPath: file).pathExtension).lowercased() == "gif") || ((URL(fileURLWithPath: file).pathExtension).lowercased() == "png") {
                 imageFiles.append(URL(fileURLWithPath: file))
             }
         }
-        
-        return imageFiles
     }
     
-    func readFile(as file: String?, encoding: String.Encoding) -> String? {
-        let stringContents = try? String(contentsOfFile: file ?? "", encoding: encoding)
-        if stringContents?.hasSuffix("\n") ?? false {
-            print("String contents of file \(file ?? "") end with a newline. This may not be intended and cause a test failure")
+    func readFile(as file: String, encoding: String.Encoding) throws -> String {
+        let stringContents = try String(contentsOfFile: file, encoding: encoding)
+        if stringContents.hasSuffix("\n") {
+            print("String contents of file \(file) end with a newline. This may not be intended and cause a test failure")
         }
         return stringContents
     }
@@ -136,39 +134,35 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
         }
     }
     
-    func testBlackBoxCountingResults(_ assertOnFailure: Bool) {
+    func testBlackBoxCountingResults(_ assertOnFailure: Bool) throws {
         if testResults.count == 0 {
             XCTFail("No test results")
         }
         
         let fileManager = FileManager.default
-        let imageFiles = self.imageFiles()
+        let imageFiles = self.imageFiles
         let testCount: Int = testResults.count
         
         let passedCounts = ZXIntArray(length: testCount)
         let misreadCounts = ZXIntArray(length: testCount)
         let tryHarderCounts = ZXIntArray(length: testCount)
         let tryHarderMisreadCounts = ZXIntArray(length: testCount)
-        
-        for testImage: URL? in imageFiles as? [URL?] ?? [] {
-            print("Starting \(path(inBundle: testImage) ?? "")")
+
+        for testImage in imageFiles {
+            print("Starting \(path(inBundle: testImage))")
             
-            var image: ZXImage? = nil
-            if let anImage = testImage {
-                image = ZXImage(url: anImage)
-            }
-            
-            let testImageFileName = testImage?.path?.components(separatedBy: "/").last
-            let fileBaseName = (testImageFileName as? NSString)?.substring(to: (testImageFileName as NSString?)?.range(of: ".").location)
+            var image: ZXImage = try ZXImage(url: testImage)
+            let testImageFileName = testImage.path.components(separatedBy: "/").last!
+            let fileBaseName = (testImageFileName as NSString).substring(to: (testImageFileName as NSString).range(of: ".").location)
             let expectedTextFile = Bundle(for: self).path(forResource: fileBaseName, ofType: "txt", inDirectory: testBase)
             
             var expectedText: String
             if expectedTextFile != nil {
-                expectedText = readFile(as: expectedTextFile, encoding: String.Encoding.utf8) ?? ""
+                expectedText = readFile(as: expectedTextFile, encoding: String.Encoding.utf8)
             } else {
                 let expectedTextFile = Bundle(for: self).path(forResource: fileBaseName, ofType: "bin", inDirectory: testBase)
                 XCTAssertNotNil(expectedTextFile, "Expected text does not exist")
-                expectedText = readFile(as: expectedTextFile, encoding: String.Encoding.isoLatin1) ?? ""
+                expectedText = readFile(as: expectedTextFile, encoding: String.Encoding.isoLatin1)
             }
             
             let expectedMetadataFile = URL(string: Bundle(for: self).path(forResource: fileBaseName, ofType: ".metadata.txt", inDirectory: testBase) ?? "")
@@ -271,7 +265,7 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
         }
     }
     
-    func decode(_ source: ZXBinaryBitmap?, rotation: Float, expectedText: String?, expectedMetadata: [AnyHashable : Any]?, tryHarder: Bool, misread: UnsafeMutablePointer<ObjCBool>?) -> Bool {
+    func decode(_ source: ZXBinaryBitmap, rotation: Float, expectedText: String, expectedMetadata: [ZXResultMetadataType: Any], tryHarder: Bool, misread: Bool) -> Bool {
         var expectedMetadata = expectedMetadata
         var misread = misread
         let suffix = " (\(tryHarder ? "try harder, " : "")rotation: \(Int(rotation)))"
