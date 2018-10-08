@@ -60,6 +60,7 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
         testBase = testBasePathSuffix
         self.barcodeReader = barcodeReader
         self.expectedFormat = expectedFormat
+        super.init()
     }
     
     func addTest(_ mustPassCount: Int, tryHarderCount: Int, rotation: Float) {
@@ -82,6 +83,7 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
                 imageFiles.append(URL(fileURLWithPath: file))
             }
         }
+        return imageFiles
     }
     
     func readFile(as file: String, encoding: String.Encoding) throws -> String {
@@ -93,7 +95,7 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
     }
     
     // Adapted from http://blog.coriolis.ch/2009/09/04/arbitrary-rotation-of-a-cgimage/ and https://github.com/JanX2/CreateRotateWriteCGImage
-    func rotateImage(_ original: ZXImage, degrees: Float) -> ZXImage? {
+    func rotateImage(_ original: ZXImage, degrees: Float) -> ZXImage {
         if degrees == 0.0 {
             return original
         }
@@ -154,51 +156,50 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
             var image: ZXImage = try ZXImage(url: testImage)
             let testImageFileName = testImage.path.components(separatedBy: "/").last!
             let fileBaseName = (testImageFileName as NSString).substring(to: (testImageFileName as NSString).range(of: ".").location)
-            let expectedTextFile = Bundle(for: self).path(forResource: fileBaseName, ofType: "txt", inDirectory: testBase)
+            let expectedTextFile = Bundle.main.path(forResource: fileBaseName, ofType: "txt", inDirectory: testBase)
             
             var expectedText: String
             if expectedTextFile != nil {
-                expectedText = readFile(as: expectedTextFile, encoding: String.Encoding.utf8)
+                expectedText = try readFile(as: expectedTextFile!, encoding: String.Encoding.utf8)
             } else {
-                let expectedTextFile = Bundle(for: self).path(forResource: fileBaseName, ofType: "bin", inDirectory: testBase)
+                let expectedTextFile = Bundle.main.path(forResource: fileBaseName, ofType: "bin", inDirectory: testBase)!
                 XCTAssertNotNil(expectedTextFile, "Expected text does not exist")
-                expectedText = readFile(as: expectedTextFile, encoding: String.Encoding.isoLatin1)
+                expectedText = try readFile(as: expectedTextFile, encoding: String.Encoding.isoLatin1)
             }
             
-            let expectedMetadataFile = URL(string: Bundle(for: self).path(forResource: fileBaseName, ofType: ".metadata.txt", inDirectory: testBase) ?? "")
-            var expectedMetadata: [AnyHashable : Any] = [:]
-            if fileManager.fileExists(atPath: expectedMetadataFile?.path ?? "") {
-                if let aPath = [AnyHashable : Any](contentsOfFile: expectedMetadataFile?.path ?? "") {
-                    expectedMetadata = aPath
-                }
+            let expectedMetadataFile = URL(string: Bundle.main.path(forResource: fileBaseName, ofType: ".metadata.txt", inDirectory: testBase)!)!
+            var expectedMetadata = [ZXResultMetadataType: Any]()
+            if fileManager.fileExists(atPath: expectedMetadataFile.path) {
+                // TODO METADATA
+//                if let aPath = [AnyHashable : Any](contentsOfFile: expectedMetadataFile.path) {
+//                    expectedMetadata = aPath
+//                }
             }
             
             for x in 0..<testCount {
-                let rotation = (testResults[x] as? ZXTestResult)?.rotation()
-                let rotatedImage: ZXImage? = rotateImage(image, degrees: rotation ?? 0.0)
-                var source: ZXLuminanceSource? = nil
-                if let aCgimage = rotatedImage?.cgimage {
-                    source = ZXCGImageLuminanceSource(cgImage: aCgimage) as? ZXLuminanceSource
-                }
-                var bitmap: ZXBinaryBitmap? = nil
-                if let aSource = source {
-                    bitmap = ZXBinaryBitmap(binarizer: ZXHybridBinarizer(source: aSource))
-                }
-                var misread: Bool
-                if decode(bitmap, rotation: rotation ?? 0.0, expectedText: expectedText, expectedMetadata: expectedMetadata, tryHarder: false, misread: &misread) {
-                    passedCounts?.array[x] = passedCounts?.array[x] + 1
+                let rotation = testResults[x].rotation
+                let rotatedImage: ZXImage = rotateImage(image, degrees: rotation)
+                var source: ZXLuminanceSource = try ZXCGImageLuminanceSource(cgImage: rotatedImage.cgimage)
+                var bitmap: ZXBinaryBitmap!
+
+                // TODO port ZXHybridBinarizer
+                // bitmap = ZXBinaryBitmap(binarizer: ZXHybridBinarizer(source: aSource))
+
+                var misread: Bool = false
+                if try decode(bitmap, rotation: rotation, expectedText: expectedText, expectedMetadata: expectedMetadata, tryHarder: false, misread: &misread) {
+                    passedCounts.array[x] = passedCounts.array[x] + 1
                 } else if misread {
-                    misreadCounts?.array[x] = misreadCounts?.array[x] + 1
+                    misreadCounts.array[x] = misreadCounts.array[x] + 1
                 } else {
-                    print("could not read at rotation \(rotation ?? 0.0)")
+                    print("could not read at rotation \(rotation)")
                 }
                 
-                if decode(bitmap, rotation: rotation ?? 0.0, expectedText: expectedText, expectedMetadata: expectedMetadata, tryHarder: true, misread: &misread) {
-                    tryHarderCounts?.array[x] = tryHarderCounts?.array[x] + 1
+                if try decode(bitmap, rotation: rotation, expectedText: expectedText, expectedMetadata: expectedMetadata, tryHarder: true, misread: &misread) {
+                    tryHarderCounts.array[x] = tryHarderCounts.array[x] + 1
                 } else if misread {
-                    tryHarderMisreadCounts?.array[x] = tryHarderMisreadCounts?.array[x] + 1
+                    tryHarderMisreadCounts.array[x] = tryHarderMisreadCounts.array[x] + 1
                 } else {
-                    print("could not read at rotation \(rotation ?? 0.0) w/TH")
+                    print("could not read at rotation \(rotation) w/TH")
                 }
             }
         }
@@ -210,29 +211,29 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
         var totalMaxMisread: Int = 0
         
         for x in 0..<testCount {
-            let testResult = testResults[x] as? ZXTestResult
-            print("Rotation \(Int(testResult?.rotation ?? 0)) degrees:")
-            if let aX = passedCounts?.array[x], let aCount = testResult?.mustPassCount {
-                print("  \(aX) of \(Int(imageFiles?.count ?? 0)) images passed (\(aCount) required)")
-            }
-            var failed = Int(imageFiles?.count ?? 0) - passedCounts?.array[x] ?? 0
-            if let aX = misreadCounts?.array[x] {
-                print("    \(aX) failed due to misreads, \(failed - misreadCounts?.array[x] ?? 0) not detected")
-            }
-            if let aX = tryHarderCounts?.array[x], let aCount = testResult?.tryHarderCount {
-                print("  \(aX) of \(Int(imageFiles?.count ?? 0)) images passed with try harder (\(aCount) required)")
-            }
-            failed = Int(imageFiles?.count ?? 0) - tryHarderCounts?.array[x] ?? 0
-            if let aX = tryHarderMisreadCounts?.array[x] {
-                print("    \(aX) failed due to misreads, \(failed - tryHarderMisreadCounts?.array[x] ?? 0) not detected")
-            }
-            totalFound += passedCounts?.array[x] + tryHarderCounts?.array[x]
-            totalMustPass += testResult?.mustPassCount + testResult?.tryHarderCount
-            totalMisread += misreadCounts?.array[x] + tryHarderMisreadCounts?.array[x]
-            totalMaxMisread += testResult?.maxMisreads + testResult?.maxTryHarderMisreads
+            let testResult = testResults[x]
+            print("Rotation \(Int(testResult.rotation)) degrees:")
+//            if let aX = passedCounts.array[x], let aCount = testResult.mustPassCount {
+//                print("  \(aX) of \(Int(imageFiles?.count ?? 0)) images passed (\(aCount) required)")
+//            }
+            var failed = Int32(imageFiles.count) - passedCounts.array[x]
+//            if misreadCounts.array[x] {
+//                print("    \(aX) failed due to misreads, \(failed - misreadCounts.array[x]) not detected")
+//            }
+//            if let aX = tryHarderCounts.array[x], let aCount = testResult.tryHarderCount {
+//                print("  \(aX) of \(Int(imageFiles?.count ?? 0)) images passed with try harder (\(aCount) required)")
+//            }
+            failed = Int32(imageFiles.count) - tryHarderCounts.array[x]
+//            if let aX = tryHarderMisreadCounts.array[x] {
+//                print("    \(aX) failed due to misreads, \(failed - tryHarderMisreadCounts?.array[x] ?? 0) not detected")
+//            }
+            totalFound += Int(passedCounts.array[x] + tryHarderCounts.array[x])
+            totalMustPass += testResult.mustPassCount + testResult.tryHarderCount
+            totalMisread += Int(misreadCounts.array[x] + tryHarderMisreadCounts.array[x])
+            totalMaxMisread += testResult.maxMisreads + testResult.maxTryHarderMisreads
         }
         
-        let totalTests = Int(imageFiles?.count ?? 0) * testCount * 2
+        let totalTests = Int(imageFiles.count) * testCount * 2
         print(String(format: "TOTALS:\nDecoded %d images out of %d (%d%%, %d required)", totalFound, totalTests, totalFound * 100 / totalTests, totalMustPass))
         if totalFound > totalMustPass {
             print("  +++ Test too lax by \(totalFound - totalMustPass) images")
@@ -249,79 +250,77 @@ class ZXAbstractBlackBoxTestCase: XCTestCase {
         // Then run through again and assert if any failed
         if assertOnFailure {
             for x in 0..<testCount {
-                let testResult = testResults[x] as? ZXTestResult
-                var label: String? = nil
-                if let aRotation = testResult?.rotation {
-                    label = "Rotation \(aRotation) degrees: Too many images failed"
-                }
-                XCTAssertTrue(passedCounts?.array[x] >= testResult?.mustPassCount, "%@", label)
-                XCTAssertTrue(tryHarderCounts?.array[x] >= testResult?.tryHarderCount, "Try harder, %@", label)
-                if let aRotation = testResult?.rotation {
-                    label = "Rotation \(aRotation) degrees: Too many images misread"
-                }
-                XCTAssertTrue(misreadCounts?.array[x] <= testResult?.maxMisreads, "%@", label)
-                XCTAssertTrue(tryHarderMisreadCounts?.array[x] <= testResult?.maxTryHarderMisreads, "Try harder, %@", label)
+                let testResult = testResults[x]
+                var label: String = "Rotation \(testResult.rotation) degrees: Too many images failed"
+                XCTAssertTrue(passedCounts.array[x] >= testResult.mustPassCount, "\(label)")
+                XCTAssertTrue(tryHarderCounts.array[x] >= testResult.tryHarderCount, "Try harder, \(label)")
+                // TODO
+                label = "Rotation \(testResult.rotation) degrees: Too many images misread"
+                XCTAssertTrue(misreadCounts.array[x] <= testResult.maxMisreads, "\(label)")
+                XCTAssertTrue(tryHarderMisreadCounts.array[x] <= testResult.maxTryHarderMisreads, "Try harder, \(label)")
             }
         }
     }
     
-    func decode(_ source: ZXBinaryBitmap, rotation: Float, expectedText: String, expectedMetadata: [ZXResultMetadataType: Any], tryHarder: Bool, misread: Bool) -> Bool {
-        var expectedMetadata = expectedMetadata
-        var misread = misread
+    func decode(_ source: ZXBinaryBitmap, rotation: Float, expectedText: String, expectedMetadata: [ZXResultMetadataType: Any], tryHarder: Bool, misread: inout Bool) throws -> Bool {
         let suffix = " (\(tryHarder ? "try harder, " : "")rotation: \(Int(rotation)))"
         misread = false
         
-        let hints = ZXDecodeHints()
-        let pureHints = ZXDecodeHints()
+        var hints = ZXDecodeHints()
+        var pureHints = ZXDecodeHints()
         pureHints.pureBarcode = true
         if tryHarder {
             hints.tryHarder = true
             pureHints.tryHarder = true
         }
-        
-        var result: ZXResult? = barcodeReader?.decode(source, hints: pureHints, error: nil)
-        if result == nil {
-            result = barcodeReader?.decode(source, hints: hints, error: nil)
-        }
-        if result == nil {
-            return false
-        }
-        
-        if expectedFormat != result?.barcodeFormat {
-            if let aFormat = result?.barcodeFormat {
-                print("Format mismatch: expected '\(barcodeFormat(asString: expectedFormat) ?? "")' but got '\(barcodeFormat(asString: aFormat) ?? "")'\(suffix)")
+
+        // TODO do catch
+        var result: ZXResult
+        do {
+            result = try barcodeReader.decode(image: source, hints: pureHints)
+        } catch {
+            do {
+                result = try barcodeReader.decode(image: source, hints: hints)
+            } catch {
+                return false
             }
+        }
+        
+        if expectedFormat != result.barcodeFormat {
+            print("Format mismatch: expected '\(ZXAbstractBlackBoxTestCase.barcodeFormat(asString: expectedFormat))' but got '\(ZXAbstractBlackBoxTestCase.barcodeFormat(asString: result.barcodeFormat))'\(suffix)")
             misread = true
             return false
         }
         
-        let resultText = result?.text
+        let resultText = result.text
         if !(expectedText == resultText) {
             print("Content mismatch: expected '\(expectedText ?? "")' but got '\(resultText ?? "")'\(suffix)")
             misread = true
             return false
         }
         
-        var resultMetadata = result?.resultMetadata
-        for keyObj: Any? in (expectedMetadata?.keys)! {
-            let key = Int(keyObj ?? 0) as? ZXResultMetadataType
-            var expectedValue: Any? = nil
-            if let anObj = keyObj {
-                expectedValue = expectedMetadata?[anObj]
-            }
-            var actualValue: Any? = nil
-            if let anObj = keyObj {
-                actualValue = resultMetadata?[anObj]
-            }
-            if !(expectedValue == actualValue) {
-                if let aKey = key, let aValue = expectedValue, let aValue1 = actualValue {
-                    print("Metadata mismatch: for key '\(aKey)' expected '\(aValue)' but got '\(aValue1)'")
-                }
-                misread = true
-                return false
-            }
-        }
-        
+        var resultMetadata = result.resultMetadata
+
+        // TODO metadata comparison
+//        for keyObj: Any? in expectedMetadata.keys {
+//            let key = Int(keyObj ?? 0) as? ZXResultMetadataType
+//            var expectedValue: Any? = nil
+//            if let anObj = keyObj {
+//                expectedValue = expectedMetadata?[anObj]
+//            }
+//            var actualValue: Any? = nil
+//            if let anObj = keyObj {
+//                actualValue = resultMetadata?[anObj]
+//            }
+//            if !(expectedValue == actualValue) {
+//                if let aKey = key, let aValue = expectedValue, let aValue1 = actualValue {
+//                    print("Metadata mismatch: for key '\(aKey)' expected '\(aValue)' but got '\(aValue1)'")
+//                }
+//                misread = true
+//                return false
+//            }
+//        }
+
         return true
     }
 }
